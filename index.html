@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Input Data Penduduk</title>
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --bg-color: #f3f4f6;
+            --card-bg: #ffffff;
+            --text-main: #1f2937;
+            --error-bg: #fee2e2;
+            --error-border: #ef4444;
+            --border-color: #e5e7eb;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            padding: 40px 20px;
+            margin: 0;
+        }
+
+        .container {
+            background-color: var(--card-bg);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+        }
+
+        h2 {
+            margin-top: 0;
+            text-align: center;
+            color: var(--text-main);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+        }
+
+        /* Kelas untuk mengubah background menjadi merah saat error/duplikat */
+        .input-error {
+            background-color: var(--error-bg) !important;
+            border-color: var(--error-border) !important;
+            color: #b91c1c;
+        }
+
+        button {
+            width: 100%;
+            background-color: var(--primary);
+            color: white;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: var(--primary-hover);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 30px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background-color: #f8fafc;
+            font-weight: 600;
+        }
+
+        td {
+            font-family: monospace;
+            font-size: 15px;
+        }
+
+        .empty-state {
+            text-align: center;
+            color: #6b7280;
+            font-style: italic;
+            padding: 20px !important;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Registrasi Data Kependudukan</h2>
+        
+        <div class="form-group">
+            <label for="nik">Nomor Induk Kependudukan (NIK)</label>
+            <input type="text" id="nik" maxlength="16" placeholder="Masukkan 16 digit NIK" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+        </div>
+
+        <div class="form-group">
+            <label for="kk">Nomor Kartu Keluarga (KK)</label>
+            <input type="text" id="kk" maxlength="16" placeholder="Masukkan 16 digit KK" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+        </div>
+
+        <button onclick="tambahData()">Tambah Data</button>
+
+        <table>
+            <thead>
+                <tr>
+                    <th width="10%">No</th>
+                    <th width="45%">Nomor NIK</th>
+                    <th width="45%">Nomor KK</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                <tr>
+                    <td colspan="3" class="empty-state">Belum ada data tersimpan</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        // Array untuk menyimpan data sekaligus mempermudah validasi duplikat
+        let dataPenduduk = [];
+
+        function tambahData() {
+            const inputNik = document.getElementById('nik');
+            const inputKk = document.getElementById('kk');
+            
+            const nik = inputNik.value;
+            const kk = inputKk.value;
+
+            // Reset status error sebelum dicek
+            inputNik.classList.remove('input-error');
+            inputKk.classList.remove('input-error');
+
+            // 1. Validasi 16 Digit
+            if (nik.length !== 16) {
+                alert("Peringatan: NIK harus persis 16 digit angka!");
+                inputNik.classList.add('input-error');
+                return;
+            }
+            if (kk.length !== 16) {
+                alert("Peringatan: KK harus persis 16 digit angka!");
+                inputKk.classList.add('input-error');
+                return;
+            }
+
+            // 2. Validasi Duplikat
+            let isNikDuplicate = dataPenduduk.some(data => data.nik === nik);
+            let isKkDuplicate = dataPenduduk.some(data => data.kk === kk);
+
+            if (isNikDuplicate || isKkDuplicate) {
+                let pesanError = "Gagal ditambahkan!\n";
+                if (isNikDuplicate) {
+                    pesanError += "- NIK ini sudah terdaftar.\n";
+                    inputNik.classList.add('input-error');
+                }
+                if (isKkDuplicate) {
+                    pesanError += "- No KK ini sudah terdaftar.";
+                    inputKk.classList.add('input-error');
+                }
+                alert(pesanError); // Munculkan popup
+                return;
+            }
+
+            // Jika lulus semua validasi, masukkan ke array
+            dataPenduduk.push({ nik: nik, kk: kk });
+            
+            // Bersihkan form
+            inputNik.value = '';
+            inputKk.value = '';
+            inputNik.focus();
+
+            // Render ulang tabel
+            renderTable();
+        }
+
+        // Fungsi untuk memformat angka (7371111234561234 -> 737111 123456 1234)
+        function formatAngka(angka) {
+            // Memisahkan dengan format: 6 digit spasi 6 digit spasi 4 digit
+            return angka.replace(/(\d{6})(\d{6})(\d{4})/, '$1 $2 $3');
+        }
+
+        // Fungsi untuk memperbarui tampilan tabel
+        function renderTable() {
+            const tbody = document.getElementById('tableBody');
+            tbody.innerHTML = ''; // Kosongkan tabel dulu
+
+            if (dataPenduduk.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="3" class="empty-state">Belum ada data tersimpan</td></tr>';
+                return;
+            }
+
+            dataPenduduk.forEach((data, index) => {
+                const tr = document.createElement('tr');
+                
+                tr.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${formatAngka(data.nik)}</td>
+                    <td>${formatAngka(data.kk)}</td>
+                `;
+                
+                tbody.appendChild(tr);
+            });
+        }
+    </script>
+</body>
+</html>
