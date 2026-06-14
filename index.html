@@ -5,10 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Registrasi Data</title>
     
+    <!-- PENGATURAN PWA & FAVICON -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#111827">
     <link rel="apple-touch-icon" href="icon-192.png">
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
     
     <style>
         /* ================= TEMA DEFAULT (DARK) ================= */
@@ -19,11 +20,7 @@
             --card-bg: #1f2937;
             --text-main: #f9fafb;
             --text-muted: #9ca3af;
-            --error-bg: #7f1d1d;
-            --error-text: #fca5a5;
-            --error-border: #ef4444;
             --border-color: #374151;
-            --mark-bg: #713f12; 
             --input-bg: #374151;
             --input-text: #f9fafb;
             --header-bg: #111827;
@@ -38,11 +35,7 @@
             --card-bg: #ffffff;
             --text-main: #1f2937;
             --text-muted: #6b7280;
-            --error-bg: #fee2e2;
-            --error-text: #b91c1c;
-            --error-border: #ef4444;
             --border-color: #e5e7eb;
-            --mark-bg: #fef08a; 
             --input-bg: #ffffff;
             --input-text: #1f2937;
             --header-bg: #f8fafc;
@@ -57,11 +50,7 @@
             --card-bg: #ffffff;
             --text-main: #064e3b;
             --text-muted: #047857;
-            --error-bg: #fee2e2;
-            --error-text: #b91c1c;
-            --error-border: #ef4444;
             --border-color: #a7f3d0;
-            --mark-bg: #fef08a;
             --input-bg: #ffffff;
             --input-text: #064e3b;
             --header-bg: #d1fae5;
@@ -76,11 +65,7 @@
             --card-bg: #1e293b;
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
-            --error-bg: #7f1d1d;
-            --error-text: #fca5a5;
-            --error-border: #ef4444;
             --border-color: #334155;
-            --mark-bg: #713f12;
             --input-bg: #334155;
             --input-text: #f8fafc;
             --header-bg: #0f172a;
@@ -95,11 +80,7 @@
             --card-bg: #ffffff;
             --text-main: #431407; 
             --text-muted: #9a3412;
-            --error-bg: #fee2e2;
-            --error-text: #b91c1c;
-            --error-border: #ef4444;
             --border-color: #fed7aa; 
-            --mark-bg: #fef08a;
             --input-bg: #ffffff;
             --input-text: #431407;
             --header-bg: #ffedd5; 
@@ -145,8 +126,13 @@
             font-size: 14px;
         }
 
-        input[type="text"] {
-            width: 100%;
+        .input-group {
+            display: flex;
+            gap: 8px;
+        }
+
+        .input-group input[type="text"] {
+            flex-grow: 1;
             padding: 14px;
             background-color: var(--input-bg);
             color: var(--input-text);
@@ -157,49 +143,10 @@
             transition: all 0.3s;
         }
 
-        input[type="text"]:focus {
+        .input-group input[type="text"]:focus {
             outline: none;
             border-color: var(--primary);
             box-shadow: 0 0 0 3px rgba(var(--primary), 0.2);
-        }
-
-        .input-error {
-            background-color: var(--error-bg) !important;
-            border-color: var(--error-border) !important;
-            color: var(--error-text) !important;
-        }
-
-        button.btn-primary {
-            width: 100%;
-            background-color: var(--primary);
-            color: white;
-            padding: 14px;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            margin-bottom: 20px;
-            transition: background-color 0.3s;
-        }
-
-        button.btn-primary:hover {
-            background-color: var(--primary-hover);
-        }
-
-        /* FITUR PENCARIAN & VOICE */
-        .search-container {
-            display: flex;
-            gap: 8px;
-            margin-top: 30px;
-            margin-bottom: 15px;
-            border-top: 2px dashed var(--border-color);
-            padding-top: 20px;
-        }
-
-        .search-container input {
-            padding: 10px 14px;
-            font-size: 14px;
         }
 
         .btn-voice {
@@ -231,6 +178,43 @@
             100% { transform: scale(1); }
         }
 
+        button.btn-primary {
+            width: 100%;
+            background-color: var(--primary);
+            color: white;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-bottom: 20px;
+            transition: background-color 0.3s;
+        }
+
+        button.btn-primary:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .search-container {
+            display: flex;
+            gap: 8px;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            border-top: 2px dashed var(--border-color);
+            padding-top: 20px;
+        }
+
+        .search-container input {
+            flex-grow: 1;
+            padding: 10px 14px;
+            font-size: 14px;
+            background-color: var(--input-bg);
+            color: var(--input-text);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+        }
+
         button.btn-download {
             width: 100%;
             background-color: #10b981;
@@ -259,41 +243,42 @@
 
         .data-header {
             background-color: var(--header-bg);
-            padding: 8px 12px;
+            padding: 10px 12px;
             font-weight: bold;
             font-size: 14px;
-            border-bottom: 1px solid var(--border-color);
             color: var(--text-muted);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            transition: background-color 0.3s, border-color 0.3s;
+            border-bottom: 1px solid var(--border-color);
         }
 
-        .header-left {
+        .status-container {
             display: flex;
-            align-items: center;
-            gap: 12px;
+            justify-content: center;
+            padding: 10px;
+            border-bottom: 1px solid var(--border-color);
+            background-color: rgba(0,0,0,0.03); /* Sedikit gelap untuk memberi dimensi */
         }
 
-        /* CHECKBOX STATUS */
         .status-label {
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
             cursor: pointer;
-            font-size: 12px;
+            font-size: 14px;
             user-select: none;
-            background: rgba(0,0,0,0.05);
-            padding: 4px 8px;
-            border-radius: 6px;
+            background-color: var(--card-bg);
+            padding: 6px 14px;
+            border-radius: 20px;
             border: 1px solid var(--border-color);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
 
         .status-label input {
             cursor: pointer;
-            width: 14px;
-            height: 14px;
+            width: 16px;
+            height: 16px;
             margin: 0;
         }
 
@@ -301,19 +286,14 @@
             font-weight: bold;
         }
 
-        .status-belum {
-            color: #ef4444; /* Merah */
-        }
-
-        .status-sudah {
-            color: #10b981; /* Hijau */
-        }
+        .status-belum { color: #ef4444; }
+        .status-sudah { color: #10b981; }
 
         .btn-hapus {
             color: #ef4444;
             background: none;
             border: none;
-            font-size: 12px;
+            font-size: 13px;
             font-weight: bold;
             cursor: pointer;
             padding: 0;
@@ -366,8 +346,9 @@
             color: white !important;
         }
 
+        /* MARK HIJAU TRANSPARAN UNTUK DUPLIKASI KK */
         .mark-kk {
-            background-color: var(--mark-bg);
+            background-color: rgba(16, 185, 129, 0.2) !important; 
         }
 
         .empty-state {
@@ -390,7 +371,6 @@
             align-items: center;
             gap: 8px;
             z-index: 100;
-            transition: background-color 0.3s, border-color 0.3s;
         }
 
         .theme-switcher select {
@@ -416,19 +396,26 @@
         
         <div class="form-group">
             <label for="nik">NIK</label>
-            <input type="text" id="nik" placeholder="Masukkan 16 digit angka" oninput="formatInputPintar(this)">
+            <div class="input-group">
+                <input type="text" id="nik" placeholder="Masukkan 16 digit angka" oninput="formatInputPintar(this)">
+                <button id="btnVoiceNik" class="btn-voice" onclick="mulaiVoiceInput('nik')" title="Dikte NIK">🎤</button>
+            </div>
         </div>
 
         <div class="form-group">
             <label for="kk">KK (Opsional)</label>
-            <input type="text" id="kk" placeholder="Boleh dikosongkan" oninput="formatInputPintar(this)">
+            <div class="input-group">
+                <input type="text" id="kk" placeholder="Boleh dikosongkan" oninput="formatInputPintar(this)">
+                <button id="btnVoiceKk" class="btn-voice" onclick="mulaiVoiceInput('kk')" title="Dikte KK">🎤</button>
+            </div>
         </div>
 
         <button class="btn-primary" onclick="tambahData()">Tambah Data</button>
 
+        <!-- FITUR PENCARIAN & VOICE SEARCH -->
         <div class="search-container">
             <input type="text" id="searchInput" placeholder="🔍 Cari NIK / KK di sini..." oninput="renderData()">
-            <button id="btnVoice" class="btn-voice" onclick="mulaiVoiceSearch()" title="Cari dengan Suara">🎤</button>
+            <button id="btnVoiceSearch" class="btn-voice" onclick="mulaiVoiceSearch()" title="Cari dengan Suara">🎤</button>
         </div>
 
         <div class="data-list" id="dataContainer">
@@ -500,11 +487,8 @@
             const nik = inputNik.value;
             const kk = inputKk.value;
 
-            inputNik.classList.remove('input-error');
-
             if (nik.length !== 16) {
                 alert("NIK wajib diisi dan harus 16 digit!");
-                inputNik.classList.add('input-error');
                 return;
             }
             
@@ -515,12 +499,10 @@
 
             let isNikDuplicate = dataPenduduk.some(data => data.nik === nik);
             if (isNikDuplicate) {
-                alert("Gagal! NIK ini sudah terdaftar.");
-                inputNik.classList.add('input-error');
+                alert("Gagal! NIK ini sudah tercatat di dalam database");
                 return;
             }
 
-            // Tambahkan property status (default: false / belum daftar)
             dataPenduduk.push({ nik: nik, kk: kk, status: false });
             simpanKeLokal();
 
@@ -539,7 +521,6 @@
             }
         }
 
-        // Fungsi baru untuk mengubah status checkbox
         function ubahStatus(indexOriginal, elementCheckbox) {
             dataPenduduk[indexOriginal].status = elementCheckbox.checked;
             simpanKeLokal();
@@ -563,19 +544,58 @@
             });
         }
 
-        // FUNGSI PENCARIAN SUARA (Web Speech API)
-        function mulaiVoiceSearch() {
+        // FUNGSI INPUT SUARA UNTUK NIK DAN KK
+        function mulaiVoiceInput(targetId) {
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            
             if (!SpeechRecognition) {
-                alert("Maaf, browser Anda tidak mendukung fitur pencarian suara. Cobalah gunakan Chrome atau Edge versi terbaru.");
+                alert("Maaf, browser Anda tidak mendukung fitur ini.");
                 return;
             }
 
             const recognition = new SpeechRecognition();
-            const btnVoice = document.getElementById('btnVoice');
+            const btnVoice = targetId === 'nik' ? document.getElementById('btnVoiceNik') : document.getElementById('btnVoiceKk');
+            const inputElement = document.getElementById(targetId);
             
-            recognition.lang = 'id-ID'; // Bahasa Indonesia
+            recognition.lang = 'id-ID';
+            recognition.interimResults = false;
+            
+            recognition.onstart = function() {
+                btnVoice.classList.add('recording');
+                inputElement.placeholder = "Mendengarkan...";
+            };
+
+            recognition.onresult = function(event) {
+                let hasilSuara = event.results[0][0].transcript;
+                let angkaPencarian = hasilSuara.replace(/\s+/g, ''); 
+                inputElement.value = angkaPencarian;
+                formatInputPintar(inputElement); // Memastikan terpotong 16 digit jika berlebih
+            };
+
+            recognition.onerror = function(event) {
+                console.error("Error Speech Recognition: ", event.error);
+                alert("Pencarian suara gagal atau izin mikrofon ditolak.");
+            };
+
+            recognition.onend = function() {
+                btnVoice.classList.remove('recording');
+                inputElement.placeholder = targetId === 'nik' ? "Masukkan 16 digit angka" : "Boleh dikosongkan";
+            };
+
+            recognition.start();
+        }
+
+        // FUNGSI PENCARIAN SUARA (KOLOM PENCARIAN)
+        function mulaiVoiceSearch() {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SpeechRecognition) {
+                alert("Maaf, browser Anda tidak mendukung fitur ini.");
+                return;
+            }
+
+            const recognition = new SpeechRecognition();
+            const btnVoice = document.getElementById('btnVoiceSearch');
+            
+            recognition.lang = 'id-ID';
             recognition.interimResults = false;
             
             recognition.onstart = function() {
@@ -584,17 +604,10 @@
             };
 
             recognition.onresult = function(event) {
-                // Ambil hasil suara dan hilangkan seluruh spasi agar bisa terbaca sebagai 16 digit nyambung
                 let hasilSuara = event.results[0][0].transcript;
                 let angkaPencarian = hasilSuara.replace(/\s+/g, ''); 
-                
                 document.getElementById('searchInput').value = angkaPencarian;
                 renderData();
-            };
-
-            recognition.onerror = function(event) {
-                console.error("Error Speech Recognition: ", event.error);
-                alert("Pencarian suara gagal atau tidak diizinkan. Cek pengaturan izin mikrofon browser Anda.");
             };
 
             recognition.onend = function() {
@@ -618,7 +631,6 @@
                 return;
             }
 
-            // Memfilter data berdasarkan input pencarian, sambil tetap menyimpan index originalnya
             let dataTampil = dataPenduduk.map((data, index) => {
                 return { ...data, indexOriginal: index };
             });
@@ -637,7 +649,6 @@
 
             btnDownload.style.display = 'block';
 
-            // Menghitung duplikasi KK (hanya untuk warna kuning/mark)
             const hitungKk = {};
             dataPenduduk.forEach(d => {
                 if (d.kk) {
@@ -649,7 +660,6 @@
                 const isKkSama = data.kk && hitungKk[data.kk] > 1;
                 const kelasMarkKk = isKkSama ? 'mark-kk' : '';
                 
-                // Variabel untuk mempercantik UI status pendaftaran
                 const isSudah = data.status === true;
                 const teksStatus = isSudah ? 'Terdaftar' : 'Belum';
                 const kelasTeks = isSudah ? 'status-sudah' : 'status-belum';
@@ -659,14 +669,14 @@
                 
                 card.innerHTML = `
                     <div class="data-header">
-                        <div class="header-left">
-                            <span>No. ${data.indexOriginal + 1}</span>
-                            <label class="status-label">
-                                <input type="checkbox" ${isSudah ? 'checked' : ''} onchange="ubahStatus(${data.indexOriginal}, this)">
-                                <span class="status-text ${kelasTeks}">${teksStatus}</span>
-                            </label>
-                        </div>
+                        <span>No. ${data.indexOriginal + 1}</span>
                         <button class="btn-hapus" onclick="hapusData(${data.indexOriginal})">Hapus</button>
+                    </div>
+                    <div class="status-container">
+                        <label class="status-label">
+                            <input type="checkbox" ${isSudah ? 'checked' : ''} onchange="ubahStatus(${data.indexOriginal}, this)">
+                            <span class="status-text ${kelasTeks}">${teksStatus}</span>
+                        </label>
                     </div>
                     <div class="data-row">
                         <div class="data-info">
