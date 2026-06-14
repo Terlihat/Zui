@@ -1,4 +1,4 @@
-const CACHE_NAME = 'reg-data-cache-v1';
+const CACHE_NAME = 'reg-data-cache-v2';
 // Daftar file yang akan disimpan untuk penggunaan offline
 const urlsToCache = [
   './',
