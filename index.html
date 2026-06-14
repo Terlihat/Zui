@@ -4,13 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Registrasi Data</title>
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
     
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#111827">
     <link rel="apple-touch-icon" href="icon-192.png">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
     
     <style>
+        /* ================= TEMA DEFAULT (DARK) ================= */
         :root {
             --primary: #6366f1;
             --primary-hover: #4f46e5;
@@ -29,6 +30,7 @@
             --btn-salin-bg: #4b5563;
         }
 
+        /* ================= TEMA LIGHT ================= */
         [data-theme="light"] {
             --primary: #4f46e5;
             --primary-hover: #4338ca;
@@ -47,6 +49,7 @@
             --btn-salin-bg: #e5e7eb;
         }
 
+        /* ================= TEMA GREEN LIGHT ================= */
         [data-theme="green-light"] {
             --primary: #059669;
             --primary-hover: #047857;
@@ -65,6 +68,7 @@
             --btn-salin-bg: #a7f3d0;
         }
 
+        /* ================= TEMA BLUE DARK ================= */
         [data-theme="blue-dark"] {
             --primary: #0ea5e9;
             --primary-hover: #0284c7;
@@ -81,6 +85,25 @@
             --input-text: #f8fafc;
             --header-bg: #0f172a;
             --btn-salin-bg: #475569;
+        }
+
+        /* ================= TEMA ORANGE LIGHT ================= */
+        [data-theme="orange-light"] {
+            --primary: #ec4899; /* Pink Color */
+            --primary-hover: #db2777; /* Darker Pink Hover */
+            --bg-color: #fff7ed; /* Light Orange/Peach */
+            --card-bg: #ffffff;
+            --text-main: #431407; /* Dark Brown for readability */
+            --text-muted: #9a3412;
+            --error-bg: #fee2e2;
+            --error-text: #b91c1c;
+            --error-border: #ef4444;
+            --border-color: #fed7aa; /* Orange border */
+            --mark-bg: #fef08a;
+            --input-bg: #ffffff;
+            --input-text: #431407;
+            --header-bg: #ffedd5; /* Slightly darker orange for headers */
+            --btn-salin-bg: #fce7f3; /* Light pink background for copy button */
         }
 
         body {
@@ -137,7 +160,7 @@
         input[type="text"]:focus {
             outline: none;
             border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+            box-shadow: 0 0 0 3px rgba(var(--primary), 0.2);
         }
 
         .input-error {
@@ -199,6 +222,7 @@
             color: var(--text-muted);
             display: flex;
             justify-content: space-between;
+            transition: background-color 0.3s, border-color 0.3s;
         }
 
         .btn-hapus {
@@ -282,6 +306,7 @@
             align-items: center;
             gap: 8px;
             z-index: 100;
+            transition: background-color 0.3s, border-color 0.3s;
         }
 
         .theme-switcher select {
@@ -307,7 +332,7 @@
         
         <div class="form-group">
             <label for="nik">NIK</label>
-            <input type="text" id="nik" placeholder="Masukkan NIK" oninput="formatInputPintar(this)">
+            <input type="text" id="nik" placeholder="Masukkan 16 digit angka" oninput="formatInputPintar(this)">
         </div>
 
         <div class="form-group">
@@ -315,7 +340,7 @@
             <input type="text" id="kk" placeholder="Boleh dikosongkan" oninput="formatInputPintar(this)">
         </div>
 
-        <button class="btn-primary" onclick="tambahData()">Tambah</button>
+        <button class="btn-primary" onclick="tambahData()">Tambah Data</button>
 
         <div class="data-list" id="dataContainer">
             <div class="empty-state">Belum ada data tersimpan</div>
@@ -331,6 +356,7 @@
             <option value="light">Light</option>
             <option value="green-light">Green Light</option>
             <option value="blue-dark">Blue Dark</option>
+            <option value="orange-light">Orange Light</option>
         </select>
     </div>
 
@@ -360,6 +386,18 @@
         function ubahTema(tema) {
             document.documentElement.setAttribute('data-theme', tema);
             localStorage.setItem('pilihanTema', tema);
+            
+            const metaThemeColor = document.querySelector('meta[name="theme-color"]');
+            if(metaThemeColor) {
+                const bgColors = {
+                    'dark': '#111827',
+                    'light': '#f3f4f6',
+                    'green-light': '#ecfdf5',
+                    'blue-dark': '#0f172a',
+                    'orange-light': '#fff7ed'
+                };
+                metaThemeColor.setAttribute('content', bgColors[tema] || '#111827');
+            }
         }
 
         function simpanKeLokal() {
