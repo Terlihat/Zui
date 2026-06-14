@@ -17,7 +17,7 @@
             --error-text: #fca5a5;
             --error-border: #ef4444;
             --border-color: #374151;
-            --mark-bg: #713f12; /* Warna kuning gelap agar nyaman di mata */
+            --mark-bg: #713f12; 
             --input-bg: #374151;
             --input-text: #f9fafb;
             --header-bg: #111827;
@@ -36,7 +36,7 @@
             --error-text: #b91c1c;
             --error-border: #ef4444;
             --border-color: #e5e7eb;
-            --mark-bg: #fef08a; /* Kuning terang */
+            --mark-bg: #fef08a; 
             --input-bg: #ffffff;
             --input-text: #1f2937;
             --header-bg: #f8fafc;
@@ -81,7 +81,6 @@
             --btn-salin-bg: #475569;
         }
 
-        /* ================= GAYA UTAMA ================= */
         body {
             font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             background-color: var(--bg-color);
@@ -89,7 +88,7 @@
             display: flex;
             justify-content: center;
             padding: 15px;
-            padding-bottom: 80px; /* Ruang ekstra di bawah untuk theme switcher */
+            padding-bottom: 80px; 
             margin: 0;
             transition: background-color 0.3s, color 0.3s;
         }
@@ -139,7 +138,6 @@
             box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
         }
 
-        /* Gaya untuk input error */
         .input-error {
             background-color: var(--error-bg) !important;
             border-color: var(--error-border) !important;
@@ -177,7 +175,6 @@
             margin-top: 15px;
         }
 
-        /* Daftar Data */
         .data-list {
             display: flex;
             flex-direction: column;
@@ -270,7 +267,6 @@
             padding: 20px;
         }
 
-        /* ================= PENGATURAN TEMA (KIRI BAWAH) ================= */
         .theme-switcher {
             position: fixed;
             bottom: 20px;
@@ -313,8 +309,8 @@
         </div>
 
         <div class="form-group">
-            <label for="kk">KK</label>
-            <input type="text" id="kk" maxlength="16" placeholder="Masukkan 16 digit angka" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+            <label for="kk">KK (Opsional)</label>
+            <input type="text" id="kk" maxlength="16" placeholder="Boleh dikosongkan" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
         </div>
 
         <button class="btn-primary" onclick="tambahData()">Tambah Data</button>
@@ -339,14 +335,11 @@
     <script>
         let dataPenduduk = [];
 
-        // Dijalankan pertama kali saat halaman dimuat (Load Autosave & Tema)
         window.onload = function() {
-            // Memuat Tema dari LocalStorage (jika ada)
             const temaTersimpan = localStorage.getItem('pilihanTema') || 'dark';
             ubahTema(temaTersimpan);
             document.getElementById('themeSelect').value = temaTersimpan;
 
-            // Memuat Data dari LocalStorage (Autosave)
             const dataTersimpan = localStorage.getItem('dataRegistrasi');
             if (dataTersimpan) {
                 dataPenduduk = JSON.parse(dataTersimpan);
@@ -354,14 +347,11 @@
             }
         };
 
-        // Fungsi mengubah tema
         function ubahTema(tema) {
             document.documentElement.setAttribute('data-theme', tema);
-            // Simpan pilihan tema agar tidak hilang saat direfresh
             localStorage.setItem('pilihanTema', tema);
         }
 
-        // Fungsi menyimpan ke LocalStorage
         function simpanKeLokal() {
             localStorage.setItem('dataRegistrasi', JSON.stringify(dataPenduduk));
         }
@@ -375,13 +365,16 @@
 
             inputNik.classList.remove('input-error');
 
+            // Validasi NIK wajib 16 digit
             if (nik.length !== 16) {
-                alert("NIK harus 16 digit!");
+                alert("NIK wajib diisi dan harus 16 digit!");
                 inputNik.classList.add('input-error');
                 return;
             }
-            if (kk.length !== 16) {
-                alert("KK harus 16 digit!");
+            
+            // Validasi KK (Hanya dicek jika user mengetik sesuatu di kolom KK)
+            if (kk.length > 0 && kk.length !== 16) {
+                alert("KK harus 16 digit atau dikosongkan sama sekali!");
                 return;
             }
 
@@ -393,8 +386,6 @@
             }
 
             dataPenduduk.push({ nik: nik, kk: kk });
-            
-            // Panggil fitur autosave
             simpanKeLokal();
 
             inputNik.value = '';
@@ -407,7 +398,7 @@
         function hapusData(index) {
             if (confirm("Hapus data ini?")) {
                 dataPenduduk.splice(index, 1);
-                simpanKeLokal(); // Update autosave
+                simpanKeLokal(); 
                 renderData();
             }
         }
@@ -442,19 +433,22 @@
 
             btnDownload.style.display = 'block';
 
+            // Hitung duplikasi KK (hanya untuk KK yang tidak kosong)
             const hitungKk = {};
             dataPenduduk.forEach(d => {
-                hitungKk[d.kk] = (hitungKk[d.kk] || 0) + 1;
+                if (d.kk) {
+                    hitungKk[d.kk] = (hitungKk[d.kk] || 0) + 1;
+                }
             });
 
             dataPenduduk.forEach((data, index) => {
-                const isKkSama = hitungKk[data.kk] > 1;
+                // Baris KK bermark jika diisi dan ada lebih dari 1 data yang sama
+                const isKkSama = data.kk && hitungKk[data.kk] > 1;
                 const kelasMarkKk = isKkSama ? 'mark-kk' : '';
 
                 const card = document.createElement('div');
                 card.className = 'data-card';
                 
-                // Menambahkan tombol "Hapus" kecil di pojok header
                 card.innerHTML = `
                     <div class="data-header">
                         <span>No. ${index + 1}</span>
@@ -470,9 +464,9 @@
                     <div class="data-row ${kelasMarkKk}">
                         <div class="data-info">
                             <span class="data-label">KK</span>
-                            <span class="data-value">${formatAngka(data.kk)}</span>
+                            <span class="data-value">${data.kk ? formatAngka(data.kk) : '-'}</span>
                         </div>
-                        <button class="btn-salin" onclick="salinTeks('${data.kk}', this)">Salin</button>
+                        ${data.kk ? `<button class="btn-salin" onclick="salinTeks('${data.kk}', this)">Salin</button>` : ''}
                     </div>
                 `;
                 container.appendChild(card);
@@ -486,7 +480,7 @@
             dataPenduduk.forEach((data, index) => {
                 isiTeks += `Data Ke-${index + 1}\n`;
                 isiTeks += `NIK : ${data.nik}\n`;
-                isiTeks += `KK  : ${data.kk}\n`;
+                isiTeks += `KK  : ${data.kk ? data.kk : '-'}\n`;
                 isiTeks += `------------------------\n`;
             });
 
