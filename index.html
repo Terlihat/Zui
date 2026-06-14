@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Registrasi Data</title>
     
-    <!-- PENGATURAN PWA & FAVICON -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#111827">
     <link rel="apple-touch-icon" href="icon-192.png">
@@ -243,42 +242,41 @@
 
         .data-header {
             background-color: var(--header-bg);
-            padding: 10px 12px;
+            padding: 8px 12px;
             font-weight: bold;
             font-size: 14px;
+            border-bottom: 1px solid var(--border-color);
             color: var(--text-muted);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid var(--border-color);
+            transition: background-color 0.3s, border-color 0.3s;
         }
 
-        .status-container {
+        /* MENGEMBALIKAN POSISI KE KIRI ATAS */
+        .header-left {
             display: flex;
-            justify-content: center;
-            padding: 10px;
-            border-bottom: 1px solid var(--border-color);
-            background-color: rgba(0,0,0,0.03); /* Sedikit gelap untuk memberi dimensi */
+            align-items: center;
+            gap: 12px;
         }
 
         .status-label {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 12px;
             user-select: none;
-            background-color: var(--card-bg);
-            padding: 6px 14px;
-            border-radius: 20px;
+            background: rgba(0,0,0,0.05);
+            padding: 4px 8px;
+            border-radius: 6px;
             border: 1px solid var(--border-color);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
 
         .status-label input {
             cursor: pointer;
-            width: 16px;
-            height: 16px;
+            width: 14px;
+            height: 14px;
             margin: 0;
         }
 
@@ -293,7 +291,7 @@
             color: #ef4444;
             background: none;
             border: none;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: bold;
             cursor: pointer;
             padding: 0;
@@ -412,7 +410,6 @@
 
         <button class="btn-primary" onclick="tambahData()">Tambah Data</button>
 
-        <!-- FITUR PENCARIAN & VOICE SEARCH -->
         <div class="search-container">
             <input type="text" id="searchInput" placeholder="🔍 Cari NIK / KK di sini..." oninput="renderData()">
             <button id="btnVoiceSearch" class="btn-voice" onclick="mulaiVoiceSearch()" title="Cari dengan Suara">🎤</button>
@@ -568,7 +565,7 @@
                 let hasilSuara = event.results[0][0].transcript;
                 let angkaPencarian = hasilSuara.replace(/\s+/g, ''); 
                 inputElement.value = angkaPencarian;
-                formatInputPintar(inputElement); // Memastikan terpotong 16 digit jika berlebih
+                formatInputPintar(inputElement); 
             };
 
             recognition.onerror = function(event) {
@@ -669,14 +666,14 @@
                 
                 card.innerHTML = `
                     <div class="data-header">
-                        <span>No. ${data.indexOriginal + 1}</span>
+                        <div class="header-left">
+                            <span>No. ${data.indexOriginal + 1}</span>
+                            <label class="status-label">
+                                <input type="checkbox" ${isSudah ? 'checked' : ''} onchange="ubahStatus(${data.indexOriginal}, this)">
+                                <span class="status-text ${kelasTeks}">${teksStatus}</span>
+                            </label>
+                        </div>
                         <button class="btn-hapus" onclick="hapusData(${data.indexOriginal})">Hapus</button>
-                    </div>
-                    <div class="status-container">
-                        <label class="status-label">
-                            <input type="checkbox" ${isSudah ? 'checked' : ''} onchange="ubahStatus(${data.indexOriginal}, this)">
-                            <span class="status-text ${kelasTeks}">${teksStatus}</span>
-                        </label>
                     </div>
                     <div class="data-row">
                         <div class="data-info">
@@ -722,7 +719,6 @@
             URL.revokeObjectURL(url);
         }
 
-        // ================= PENDAFTARAN SERVICE WORKER (PWA) =================
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('./sw.js')
