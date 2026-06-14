@@ -1,11 +1,31 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Registrasi Data</title>
     <style>
+        /* ================= TEMA DEFAULT (DARK) ================= */
         :root {
+            --primary: #6366f1;
+            --primary-hover: #4f46e5;
+            --bg-color: #111827;
+            --card-bg: #1f2937;
+            --text-main: #f9fafb;
+            --text-muted: #9ca3af;
+            --error-bg: #7f1d1d;
+            --error-text: #fca5a5;
+            --error-border: #ef4444;
+            --border-color: #374151;
+            --mark-bg: #713f12; /* Warna kuning gelap agar nyaman di mata */
+            --input-bg: #374151;
+            --input-text: #f9fafb;
+            --header-bg: #111827;
+            --btn-salin-bg: #4b5563;
+        }
+
+        /* ================= TEMA LIGHT ================= */
+        [data-theme="light"] {
             --primary: #4f46e5;
             --primary-hover: #4338ca;
             --bg-color: #f3f4f6;
@@ -13,29 +33,75 @@
             --text-main: #1f2937;
             --text-muted: #6b7280;
             --error-bg: #fee2e2;
+            --error-text: #b91c1c;
             --error-border: #ef4444;
             --border-color: #e5e7eb;
-            --mark-bg: #fef08a; /* Warna kuning untuk KK yang sama */
+            --mark-bg: #fef08a; /* Kuning terang */
+            --input-bg: #ffffff;
+            --input-text: #1f2937;
+            --header-bg: #f8fafc;
+            --btn-salin-bg: #e5e7eb;
         }
 
+        /* ================= TEMA GREEN LIGHT ================= */
+        [data-theme="green-light"] {
+            --primary: #059669;
+            --primary-hover: #047857;
+            --bg-color: #ecfdf5;
+            --card-bg: #ffffff;
+            --text-main: #064e3b;
+            --text-muted: #047857;
+            --error-bg: #fee2e2;
+            --error-text: #b91c1c;
+            --error-border: #ef4444;
+            --border-color: #a7f3d0;
+            --mark-bg: #fef08a;
+            --input-bg: #ffffff;
+            --input-text: #064e3b;
+            --header-bg: #d1fae5;
+            --btn-salin-bg: #a7f3d0;
+        }
+
+        /* ================= TEMA BLUE DARK ================= */
+        [data-theme="blue-dark"] {
+            --primary: #0ea5e9;
+            --primary-hover: #0284c7;
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --error-bg: #7f1d1d;
+            --error-text: #fca5a5;
+            --error-border: #ef4444;
+            --border-color: #334155;
+            --mark-bg: #713f12;
+            --input-bg: #334155;
+            --input-text: #f8fafc;
+            --header-bg: #0f172a;
+            --btn-salin-bg: #475569;
+        }
+
+        /* ================= GAYA UTAMA ================= */
         body {
             font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             background-color: var(--bg-color);
             color: var(--text-main);
             display: flex;
             justify-content: center;
-            padding: 15px; /* Padding diperkecil untuk layar HP */
+            padding: 15px;
+            padding-bottom: 80px; /* Ruang ekstra di bawah untuk theme switcher */
             margin: 0;
+            transition: background-color 0.3s, color 0.3s;
         }
 
-        /* Container disesuaikan untuk ukuran mobile standar */
         .container {
             background-color: var(--card-bg);
             padding: 20px;
             border-radius: 16px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
             width: 100%;
             max-width: 480px; 
+            transition: background-color 0.3s;
         }
 
         h2 {
@@ -58,23 +124,26 @@
         input[type="text"] {
             width: 100%;
             padding: 14px;
+            background-color: var(--input-bg);
+            color: var(--input-text);
             border: 1px solid var(--border-color);
             border-radius: 8px;
             box-sizing: border-box;
-            font-size: 16px; /* 16px mencegah HP auto-zoom saat mengetik */
+            font-size: 16px;
             transition: all 0.3s;
         }
 
         input[type="text"]:focus {
             outline: none;
             border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
         }
 
+        /* Gaya untuk input error */
         .input-error {
             background-color: var(--error-bg) !important;
             border-color: var(--error-border) !important;
-            color: #b91c1c;
+            color: var(--error-text) !important;
         }
 
         button.btn-primary {
@@ -88,11 +157,16 @@
             font-weight: bold;
             cursor: pointer;
             margin-bottom: 20px;
+            transition: background-color 0.3s;
+        }
+
+        button.btn-primary:hover {
+            background-color: var(--primary-hover);
         }
 
         button.btn-download {
             width: 100%;
-            background-color: #10b981; /* Warna hijau untuk tombol download */
+            background-color: #10b981;
             color: white;
             padding: 14px;
             border: none;
@@ -103,7 +177,7 @@
             margin-top: 15px;
         }
 
-        /* Tampilan Tabel Modern untuk Mobile (Card List) */
+        /* Daftar Data */
         .data-list {
             display: flex;
             flex-direction: column;
@@ -114,15 +188,28 @@
             border: 1px solid var(--border-color);
             border-radius: 8px;
             overflow: hidden;
+            transition: border-color 0.3s;
         }
 
         .data-header {
-            background-color: #f8fafc;
+            background-color: var(--header-bg);
             padding: 8px 12px;
             font-weight: bold;
             font-size: 14px;
             border-bottom: 1px solid var(--border-color);
             color: var(--text-muted);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .btn-hapus {
+            color: #ef4444;
+            background: none;
+            border: none;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            padding: 0;
         }
 
         .data-row {
@@ -131,6 +218,7 @@
             align-items: center;
             padding: 12px;
             border-bottom: 1px solid var(--border-color);
+            transition: background-color 0.3s;
         }
 
         .data-row:last-child {
@@ -155,7 +243,7 @@
         }
 
         .btn-salin {
-            background-color: #e5e7eb;
+            background-color: var(--btn-salin-bg);
             color: var(--text-main);
             border: none;
             padding: 6px 12px;
@@ -167,8 +255,8 @@
         }
 
         .btn-salin.disalin {
-            background-color: #10b981;
-            color: white;
+            background-color: #10b981 !important;
+            color: white !important;
         }
 
         .mark-kk {
@@ -180,6 +268,37 @@
             color: var(--text-muted);
             font-style: italic;
             padding: 20px;
+        }
+
+        /* ================= PENGATURAN TEMA (KIRI BAWAH) ================= */
+        .theme-switcher {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background-color: var(--card-bg);
+            padding: 8px 12px;
+            border-radius: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            z-index: 100;
+        }
+
+        .theme-switcher select {
+            background-color: transparent;
+            color: var(--text-main);
+            border: none;
+            font-size: 14px;
+            font-weight: 600;
+            outline: none;
+            cursor: pointer;
+        }
+        
+        .theme-switcher select option {
+            background-color: var(--card-bg);
+            color: var(--text-main);
         }
     </style>
 </head>
@@ -207,8 +326,45 @@
         <button class="btn-download" id="btnDownload" style="display: none;" onclick="downloadTXT()">Download Semua (TXT)</button>
     </div>
 
+    <div class="theme-switcher">
+        <label for="themeSelect" style="margin:0; font-size: 18px;">🎨</label>
+        <select id="themeSelect" onchange="ubahTema(this.value)">
+            <option value="dark">Dark (Default)</option>
+            <option value="light">Light</option>
+            <option value="green-light">Green Light</option>
+            <option value="blue-dark">Blue Dark</option>
+        </select>
+    </div>
+
     <script>
         let dataPenduduk = [];
+
+        // Dijalankan pertama kali saat halaman dimuat (Load Autosave & Tema)
+        window.onload = function() {
+            // Memuat Tema dari LocalStorage (jika ada)
+            const temaTersimpan = localStorage.getItem('pilihanTema') || 'dark';
+            ubahTema(temaTersimpan);
+            document.getElementById('themeSelect').value = temaTersimpan;
+
+            // Memuat Data dari LocalStorage (Autosave)
+            const dataTersimpan = localStorage.getItem('dataRegistrasi');
+            if (dataTersimpan) {
+                dataPenduduk = JSON.parse(dataTersimpan);
+                renderData();
+            }
+        };
+
+        // Fungsi mengubah tema
+        function ubahTema(tema) {
+            document.documentElement.setAttribute('data-theme', tema);
+            // Simpan pilihan tema agar tidak hilang saat direfresh
+            localStorage.setItem('pilihanTema', tema);
+        }
+
+        // Fungsi menyimpan ke LocalStorage
+        function simpanKeLokal() {
+            localStorage.setItem('dataRegistrasi', JSON.stringify(dataPenduduk));
+        }
 
         function tambahData() {
             const inputNik = document.getElementById('nik');
@@ -219,7 +375,6 @@
 
             inputNik.classList.remove('input-error');
 
-            // 1. Validasi 16 Digit
             if (nik.length !== 16) {
                 alert("NIK harus 16 digit!");
                 inputNik.classList.add('input-error');
@@ -230,24 +385,31 @@
                 return;
             }
 
-            // 2. Validasi Duplikat (Hanya NIK)
             let isNikDuplicate = dataPenduduk.some(data => data.nik === nik);
-
             if (isNikDuplicate) {
                 alert("Gagal! NIK ini sudah terdaftar.");
                 inputNik.classList.add('input-error');
                 return;
             }
 
-            // Simpan data
             dataPenduduk.push({ nik: nik, kk: kk });
             
-            // Bersihkan form
+            // Panggil fitur autosave
+            simpanKeLokal();
+
             inputNik.value = '';
             inputKk.value = '';
             inputNik.focus();
 
             renderData();
+        }
+
+        function hapusData(index) {
+            if (confirm("Hapus data ini?")) {
+                dataPenduduk.splice(index, 1);
+                simpanKeLokal(); // Update autosave
+                renderData();
+            }
         }
 
         function formatAngka(angka) {
@@ -260,7 +422,6 @@
                 btnElement.innerText = 'Disalin!';
                 btnElement.classList.add('disalin');
                 
-                // Kembalikan tombol seperti semula setelah 1.5 detik
                 setTimeout(() => {
                     btnElement.innerText = teksAwal;
                     btnElement.classList.remove('disalin');
@@ -281,22 +442,24 @@
 
             btnDownload.style.display = 'block';
 
-            // Menghitung jumlah KK untuk menentukan mana yang duplikat
             const hitungKk = {};
             dataPenduduk.forEach(d => {
                 hitungKk[d.kk] = (hitungKk[d.kk] || 0) + 1;
             });
 
             dataPenduduk.forEach((data, index) => {
-                // Cek apakah KK ini diinput lebih dari 1 kali
                 const isKkSama = hitungKk[data.kk] > 1;
                 const kelasMarkKk = isKkSama ? 'mark-kk' : '';
 
                 const card = document.createElement('div');
                 card.className = 'data-card';
                 
+                // Menambahkan tombol "Hapus" kecil di pojok header
                 card.innerHTML = `
-                    <div class="data-header">No. ${index + 1}</div>
+                    <div class="data-header">
+                        <span>No. ${index + 1}</span>
+                        <button class="btn-hapus" onclick="hapusData(${index})">Hapus</button>
+                    </div>
                     <div class="data-row">
                         <div class="data-info">
                             <span class="data-label">NIK</span>
@@ -327,7 +490,6 @@
                 isiTeks += `------------------------\n`;
             });
 
-            // Membuat file Blob untuk didownload
             const blob = new Blob([isiTeks], { type: "text/plain" });
             const url = URL.createObjectURL(blob);
             const a = document.createElement("a");
@@ -337,7 +499,6 @@
             document.body.appendChild(a);
             a.click();
             
-            // Membersihkan elemen a dan memori
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
         }
