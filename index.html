@@ -305,12 +305,12 @@
         
         <div class="form-group">
             <label for="nik">NIK</label>
-            <input type="text" id="nik" maxlength="16" placeholder="Masukkan 16 digit angka" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+            <input type="text" id="nik" placeholder="Masukkan 16 digit angka" oninput="formatInputPintar(this)">
         </div>
 
         <div class="form-group">
             <label for="kk">KK (Opsional)</label>
-            <input type="text" id="kk" maxlength="16" placeholder="Boleh dikosongkan" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+            <input type="text" id="kk" placeholder="Boleh dikosongkan" oninput="formatInputPintar(this)">
         </div>
 
         <button class="btn-primary" onclick="tambahData()">Tambah Data</button>
@@ -347,6 +347,20 @@
             }
         };
 
+        // Fungsi baru untuk merapikan input otomatis (termasuk saat paste NIK berspasi)
+        function formatInputPintar(inputElement) {
+            // 1. Hapus semua karakter yang bukan angka (huruf, simbol, spasi)
+            let angkaBersih = inputElement.value.replace(/[^0-9]/g, '');
+            
+            // 2. Potong paksa jika lebih dari 16 digit
+            if (angkaBersih.length > 16) {
+                angkaBersih = angkaBersih.slice(0, 16);
+            }
+            
+            // 3. Kembalikan nilainya ke kotak input
+            inputElement.value = angkaBersih;
+        }
+
         function ubahTema(tema) {
             document.documentElement.setAttribute('data-theme', tema);
             localStorage.setItem('pilihanTema', tema);
@@ -365,14 +379,12 @@
 
             inputNik.classList.remove('input-error');
 
-            // Validasi NIK wajib 16 digit
             if (nik.length !== 16) {
                 alert("NIK wajib diisi dan harus 16 digit!");
                 inputNik.classList.add('input-error');
                 return;
             }
             
-            // Validasi KK (Hanya dicek jika user mengetik sesuatu di kolom KK)
             if (kk.length > 0 && kk.length !== 16) {
                 alert("KK harus 16 digit atau dikosongkan sama sekali!");
                 return;
@@ -433,7 +445,6 @@
 
             btnDownload.style.display = 'block';
 
-            // Hitung duplikasi KK (hanya untuk KK yang tidak kosong)
             const hitungKk = {};
             dataPenduduk.forEach(d => {
                 if (d.kk) {
@@ -442,7 +453,6 @@
             });
 
             dataPenduduk.forEach((data, index) => {
-                // Baris KK bermark jika diisi dan ada lebih dari 1 data yang sama
                 const isKkSama = data.kk && hitungKk[data.kk] > 1;
                 const kelasMarkKk = isKkSama ? 'mark-kk' : '';
 
