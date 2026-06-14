@@ -2,8 +2,8 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Input Data Penduduk</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Registrasi Data</title>
     <style>
         :root {
             --primary: #4f46e5;
@@ -11,9 +11,11 @@
             --bg-color: #f3f4f6;
             --card-bg: #ffffff;
             --text-main: #1f2937;
+            --text-muted: #6b7280;
             --error-bg: #fee2e2;
             --error-border: #ef4444;
             --border-color: #e5e7eb;
+            --mark-bg: #fef08a; /* Warna kuning untuk KK yang sama */
         }
 
         body {
@@ -22,43 +24,44 @@
             color: var(--text-main);
             display: flex;
             justify-content: center;
-            padding: 40px 20px;
+            padding: 15px; /* Padding diperkecil untuk layar HP */
             margin: 0;
         }
 
+        /* Container disesuaikan untuk ukuran mobile standar */
         .container {
             background-color: var(--card-bg);
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
             width: 100%;
-            max-width: 600px;
+            max-width: 480px; 
         }
 
         h2 {
             margin-top: 0;
             text-align: center;
-            color: var(--text-main);
+            font-size: 22px;
         }
 
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 16px;
         }
 
         label {
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             font-weight: 600;
             font-size: 14px;
         }
 
         input[type="text"] {
             width: 100%;
-            padding: 12px;
+            padding: 14px;
             border: 1px solid var(--border-color);
             border-radius: 8px;
             box-sizing: border-box;
-            font-size: 16px;
+            font-size: 16px; /* 16px mencegah HP auto-zoom saat mengetik */
             transition: all 0.3s;
         }
 
@@ -68,14 +71,13 @@
             box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
         }
 
-        /* Kelas untuk mengubah background menjadi merah saat error/duplikat */
         .input-error {
             background-color: var(--error-bg) !important;
             border-color: var(--error-border) !important;
             color: #b91c1c;
         }
 
-        button {
+        button.btn-primary {
             width: 100%;
             background-color: var(--primary);
             color: white;
@@ -85,78 +87,127 @@
             font-size: 16px;
             font-weight: bold;
             cursor: pointer;
-            transition: background-color 0.3s;
+            margin-bottom: 20px;
         }
 
-        button:hover {
-            background-color: var(--primary-hover);
-        }
-
-        table {
+        button.btn-download {
             width: 100%;
-            border-collapse: collapse;
-            margin-top: 30px;
+            background-color: #10b981; /* Warna hijau untuk tombol download */
+            color: white;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 15px;
         }
 
-        th, td {
+        /* Tampilan Tabel Modern untuk Mobile (Card List) */
+        .data-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .data-card {
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .data-header {
+            background-color: #f8fafc;
+            padding: 8px 12px;
+            font-weight: bold;
+            font-size: 14px;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-muted);
+        }
+
+        .data-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             padding: 12px;
-            text-align: left;
             border-bottom: 1px solid var(--border-color);
         }
 
-        th {
-            background-color: #f8fafc;
+        .data-row:last-child {
+            border-bottom: none;
+        }
+
+        .data-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .data-label {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+
+        .data-value {
+            font-family: monospace;
+            font-size: 15px;
             font-weight: 600;
         }
 
-        td {
-            font-family: monospace;
-            font-size: 15px;
+        .btn-salin {
+            background-color: #e5e7eb;
+            color: var(--text-main);
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-salin.disalin {
+            background-color: #10b981;
+            color: white;
+        }
+
+        .mark-kk {
+            background-color: var(--mark-bg);
         }
 
         .empty-state {
             text-align: center;
-            color: #6b7280;
+            color: var(--text-muted);
             font-style: italic;
-            padding: 20px !important;
+            padding: 20px;
         }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <h2>Registrasi Data Kependudukan</h2>
+        <h2>Registrasi Data</h2>
         
         <div class="form-group">
-            <label for="nik">Nomor Induk Kependudukan (NIK)</label>
-            <input type="text" id="nik" maxlength="16" placeholder="Masukkan 16 digit NIK" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+            <label for="nik">NIK</label>
+            <input type="text" id="nik" maxlength="16" placeholder="Masukkan 16 digit angka" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
         </div>
 
         <div class="form-group">
-            <label for="kk">Nomor Kartu Keluarga (KK)</label>
-            <input type="text" id="kk" maxlength="16" placeholder="Masukkan 16 digit KK" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+            <label for="kk">KK</label>
+            <input type="text" id="kk" maxlength="16" placeholder="Masukkan 16 digit angka" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
         </div>
 
-        <button onclick="tambahData()">Tambah Data</button>
+        <button class="btn-primary" onclick="tambahData()">Tambah Data</button>
 
-        <table>
-            <thead>
-                <tr>
-                    <th width="10%">No</th>
-                    <th width="45%">Nomor NIK</th>
-                    <th width="45%">Nomor KK</th>
-                </tr>
-            </thead>
-            <tbody id="tableBody">
-                <tr>
-                    <td colspan="3" class="empty-state">Belum ada data tersimpan</td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="data-list" id="dataContainer">
+            <div class="empty-state">Belum ada data tersimpan</div>
+        </div>
+
+        <button class="btn-download" id="btnDownload" style="display: none;" onclick="downloadTXT()">Download Semua (TXT)</button>
     </div>
 
     <script>
-        // Array untuk menyimpan data sekaligus mempermudah validasi duplikat
         let dataPenduduk = [];
 
         function tambahData() {
@@ -166,41 +217,29 @@
             const nik = inputNik.value;
             const kk = inputKk.value;
 
-            // Reset status error sebelum dicek
             inputNik.classList.remove('input-error');
-            inputKk.classList.remove('input-error');
 
             // 1. Validasi 16 Digit
             if (nik.length !== 16) {
-                alert("Peringatan: NIK harus persis 16 digit angka!");
+                alert("NIK harus 16 digit!");
                 inputNik.classList.add('input-error');
                 return;
             }
             if (kk.length !== 16) {
-                alert("Peringatan: KK harus persis 16 digit angka!");
-                inputKk.classList.add('input-error');
+                alert("KK harus 16 digit!");
                 return;
             }
 
-            // 2. Validasi Duplikat
+            // 2. Validasi Duplikat (Hanya NIK)
             let isNikDuplicate = dataPenduduk.some(data => data.nik === nik);
-            let isKkDuplicate = dataPenduduk.some(data => data.kk === kk);
 
-            if (isNikDuplicate || isKkDuplicate) {
-                let pesanError = "Gagal ditambahkan!\n";
-                if (isNikDuplicate) {
-                    pesanError += "- NIK ini sudah terdaftar.\n";
-                    inputNik.classList.add('input-error');
-                }
-                if (isKkDuplicate) {
-                    pesanError += "- No KK ini sudah terdaftar.";
-                    inputKk.classList.add('input-error');
-                }
-                alert(pesanError); // Munculkan popup
+            if (isNikDuplicate) {
+                alert("Gagal! NIK ini sudah terdaftar.");
+                inputNik.classList.add('input-error');
                 return;
             }
 
-            // Jika lulus semua validasi, masukkan ke array
+            // Simpan data
             dataPenduduk.push({ nik: nik, kk: kk });
             
             // Bersihkan form
@@ -208,37 +247,99 @@
             inputKk.value = '';
             inputNik.focus();
 
-            // Render ulang tabel
-            renderTable();
+            renderData();
         }
 
-        // Fungsi untuk memformat angka (7371111234561234 -> 737111 123456 1234)
         function formatAngka(angka) {
-            // Memisahkan dengan format: 6 digit spasi 6 digit spasi 4 digit
             return angka.replace(/(\d{6})(\d{6})(\d{4})/, '$1 $2 $3');
         }
 
-        // Fungsi untuk memperbarui tampilan tabel
-        function renderTable() {
-            const tbody = document.getElementById('tableBody');
-            tbody.innerHTML = ''; // Kosongkan tabel dulu
+        function salinTeks(teks, btnElement) {
+            navigator.clipboard.writeText(teks).then(() => {
+                const teksAwal = btnElement.innerText;
+                btnElement.innerText = 'Disalin!';
+                btnElement.classList.add('disalin');
+                
+                // Kembalikan tombol seperti semula setelah 1.5 detik
+                setTimeout(() => {
+                    btnElement.innerText = teksAwal;
+                    btnElement.classList.remove('disalin');
+                }, 1500);
+            });
+        }
+
+        function renderData() {
+            const container = document.getElementById('dataContainer');
+            const btnDownload = document.getElementById('btnDownload');
+            container.innerHTML = '';
 
             if (dataPenduduk.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="3" class="empty-state">Belum ada data tersimpan</td></tr>';
+                container.innerHTML = '<div class="empty-state">Belum ada data tersimpan</div>';
+                btnDownload.style.display = 'none';
                 return;
             }
 
-            dataPenduduk.forEach((data, index) => {
-                const tr = document.createElement('tr');
-                
-                tr.innerHTML = `
-                    <td>${index + 1}</td>
-                    <td>${formatAngka(data.nik)}</td>
-                    <td>${formatAngka(data.kk)}</td>
-                `;
-                
-                tbody.appendChild(tr);
+            btnDownload.style.display = 'block';
+
+            // Menghitung jumlah KK untuk menentukan mana yang duplikat
+            const hitungKk = {};
+            dataPenduduk.forEach(d => {
+                hitungKk[d.kk] = (hitungKk[d.kk] || 0) + 1;
             });
+
+            dataPenduduk.forEach((data, index) => {
+                // Cek apakah KK ini diinput lebih dari 1 kali
+                const isKkSama = hitungKk[data.kk] > 1;
+                const kelasMarkKk = isKkSama ? 'mark-kk' : '';
+
+                const card = document.createElement('div');
+                card.className = 'data-card';
+                
+                card.innerHTML = `
+                    <div class="data-header">No. ${index + 1}</div>
+                    <div class="data-row">
+                        <div class="data-info">
+                            <span class="data-label">NIK</span>
+                            <span class="data-value">${formatAngka(data.nik)}</span>
+                        </div>
+                        <button class="btn-salin" onclick="salinTeks('${data.nik}', this)">Salin</button>
+                    </div>
+                    <div class="data-row ${kelasMarkKk}">
+                        <div class="data-info">
+                            <span class="data-label">KK</span>
+                            <span class="data-value">${formatAngka(data.kk)}</span>
+                        </div>
+                        <button class="btn-salin" onclick="salinTeks('${data.kk}', this)">Salin</button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function downloadTXT() {
+            if (dataPenduduk.length === 0) return;
+
+            let isiTeks = "=== DATA REGISTRASI ===\n\n";
+            dataPenduduk.forEach((data, index) => {
+                isiTeks += `Data Ke-${index + 1}\n`;
+                isiTeks += `NIK : ${data.nik}\n`;
+                isiTeks += `KK  : ${data.kk}\n`;
+                isiTeks += `------------------------\n`;
+            });
+
+            // Membuat file Blob untuk didownload
+            const blob = new Blob([isiTeks], { type: "text/plain" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            
+            a.href = url;
+            a.download = "Data_Registrasi.txt";
+            document.body.appendChild(a);
+            a.click();
+            
+            // Membersihkan elemen a dan memori
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
         }
     </script>
 </body>
