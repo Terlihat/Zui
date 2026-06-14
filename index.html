@@ -5,8 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Registrasi Data</title>
     <link rel="icon" type="image/x-icon" href="favicon.ico">
+    
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#111827">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    
     <style>
-        /* ================= TEMA DEFAULT (DARK) ================= */
         :root {
             --primary: #6366f1;
             --primary-hover: #4f46e5;
@@ -25,7 +29,6 @@
             --btn-salin-bg: #4b5563;
         }
 
-        /* ================= TEMA LIGHT ================= */
         [data-theme="light"] {
             --primary: #4f46e5;
             --primary-hover: #4338ca;
@@ -44,7 +47,6 @@
             --btn-salin-bg: #e5e7eb;
         }
 
-        /* ================= TEMA GREEN LIGHT ================= */
         [data-theme="green-light"] {
             --primary: #059669;
             --primary-hover: #047857;
@@ -63,7 +65,6 @@
             --btn-salin-bg: #a7f3d0;
         }
 
-        /* ================= TEMA BLUE DARK ================= */
         [data-theme="blue-dark"] {
             --primary: #0ea5e9;
             --primary-hover: #0284c7;
@@ -348,17 +349,11 @@
             }
         };
 
-        // Fungsi baru untuk merapikan input otomatis (termasuk saat paste NIK berspasi)
         function formatInputPintar(inputElement) {
-            // 1. Hapus semua karakter yang bukan angka (huruf, simbol, spasi)
             let angkaBersih = inputElement.value.replace(/[^0-9]/g, '');
-            
-            // 2. Potong paksa jika lebih dari 16 digit
             if (angkaBersih.length > 16) {
                 angkaBersih = angkaBersih.slice(0, 16);
             }
-            
-            // 3. Kembalikan nilainya ke kotak input
             inputElement.value = angkaBersih;
         }
 
@@ -506,6 +501,19 @@
             
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
+        }
+
+        // ================= PENDAFTARAN SERVICE WORKER (PWA) =================
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then((registration) => {
+                        console.log('PWA Service Worker berhasil didaftarkan!', registration.scope);
+                    })
+                    .catch((error) => {
+                        console.error('PWA Service Worker gagal didaftarkan:', error);
+                    });
+            });
         }
     </script>
 </body>
