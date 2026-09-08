@@ -1,6 +1,6 @@
 let dataPenduduk = [];
 let modalCallback = null;
-let limitTampil = 10; // Load limit untuk tabel
+let limitTampil = 10;
 
 window.onload = function() {
     const temaTersimpan = localStorage.getItem('pilihanTema') || 'dark-default';
@@ -17,9 +17,7 @@ window.onload = function() {
     }
 
     const catatanTersimpan = localStorage.getItem('dataCatatan');
-    if (catatanTersimpan) {
-        document.getElementById('catatanInput').value = catatanTersimpan;
-    }
+    if (catatanTersimpan) document.getElementById('catatanInput').value = catatanTersimpan;
 
     updateButtonState('nik');
     updateButtonState('kk');
@@ -42,7 +40,6 @@ function switchSubTab(subId) {
     document.getElementById('tab-' + subId).classList.add('active');
     document.getElementById('sub-' + subId).classList.add('active');
 
-    // Tampilkan list tabel hanya di sub-tab database
     const listContainer = document.getElementById('data-list-container');
     if (subId === 'database') {
         listContainer.style.display = 'block';
@@ -89,7 +86,7 @@ function handleInputPintar(inputElement) {
 
 function handleSearchInput(inputElement) {
     updateButtonState(inputElement.id);
-    renderData(true); // Reset load limit jika melakukan pencarian
+    renderData(true);
 }
 
 function hapusInput(targetId) {
@@ -114,10 +111,12 @@ function pilihTemaItem(tema, element) {
     localStorage.setItem('pilihanTema', tema);
     updateMetaThemeColor(tema);
 }
+
 function updateMetaThemeColor(tema) {
     const meta = document.querySelector('meta[name="theme-color"]');
     if (meta) meta.setAttribute('content', tema.startsWith('dark') ? '#111827' : '#f8fafc');
 }
+
 function simpanCatatan() {
     localStorage.setItem('dataCatatan', document.getElementById('catatanInput').value);
 }
@@ -153,7 +152,7 @@ document.getElementById('modalBtnCancel').addEventListener('click', closeModal);
 function simpanKeLokal() { localStorage.setItem('dataRegistrasi', JSON.stringify(dataPenduduk)); }
 
 function eksekusiTambahData(nik, kk) {
-    dataPenduduk.unshift({ nik: nik, kk: kk, status: false }); // Menambahkan di urutan awal (teratas)
+    dataPenduduk.unshift({ nik: nik, kk: kk, status: false });
     simpanKeLokal();
     hapusInput('nik'); hapusInput('kk');
     document.getElementById('nik').focus();
@@ -180,6 +179,7 @@ function hapusData(indexOriginal) {
         simpanKeLokal(); renderData(false);
     });
 }
+
 function ubahStatus(indexOriginal, checkbox) {
     dataPenduduk[indexOriginal].status = checkbox.checked;
     simpanKeLokal(); renderData(false);
@@ -194,7 +194,7 @@ function muatLebihBanyak() {
 function renderData(resetLimit = false) {
     if (resetLimit) limitTampil = 10;
     const container = document.getElementById('dataContainer');
-    const btnDownload = document.getElementById('btnDownload');
+    const actionBtns = document.getElementById('action-buttons');
     const btnLoadMore = document.getElementById('btnLoadMore');
     const keyword = document.getElementById('searchInput').value.replace(/\s+/g, '').toLowerCase();
 
@@ -203,7 +203,7 @@ function renderData(resetLimit = false) {
 
     if (dataPenduduk.length === 0) {
         container.innerHTML = '<div class="empty-state">Belum ada data tersimpan</div>';
-        btnDownload.style.display = 'none';
+        actionBtns.style.display = 'none';
         return;
     }
 
@@ -215,16 +215,15 @@ function renderData(resetLimit = false) {
 
     if (dataTampil.length === 0) {
         container.innerHTML = '<div class="empty-state">Data tidak ditemukan</div>';
-        btnDownload.style.display = 'block';
+        actionBtns.style.display = 'block';
         return;
     }
 
-    btnDownload.style.display = 'block';
+    actionBtns.style.display = 'block';
 
     const hitungKk = {};
     dataPenduduk.forEach(d => { if (d.kk) hitungKk[d.kk] = (hitungKk[d.kk] || 0) + 1; });
 
-    // Paginasi array (potong berdasarkan batas)
     const dataPaginasi = dataTampil.slice(0, limitTampil);
 
     dataPaginasi.forEach((data) => {
@@ -256,13 +255,12 @@ function renderData(resetLimit = false) {
         container.appendChild(card);
     });
 
-    if (dataTampil.length > limitTampil) {
-        btnLoadMore.style.display = 'block';
-    }
+    if (dataTampil.length > limitTampil) btnLoadMore.style.display = 'block';
 }
 
-/* UTILS */
+/* UTILS: FORMAT, SALIN, EXPORT, IMPORT */
 function formatAngka(angka) { return angka.replace(/(\d{6})(\d{6})(\d{4})/, '$1 $2 $3'); }
+
 function salinTeks(teks, btnElement) {
     navigator.clipboard.writeText(teks).then(() => {
         const teksAwal = btnElement.innerText;
@@ -270,6 +268,7 @@ function salinTeks(teks, btnElement) {
         setTimeout(() => { btnElement.innerText = teksAwal; btnElement.classList.remove('disalin'); }, 1500);
     });
 }
+
 function downloadTXT() {
     if (dataPenduduk.length === 0) return;
     let isiTeks = "=== DATA REGISTRASI ===\n\n";
@@ -280,6 +279,52 @@ function downloadTXT() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a"); a.href = url; a.download = "Data_Registrasi.txt";
     document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
+}
+
+function exportJSON() {
+    if (dataPenduduk.length === 0) return showModal("Perhatian", "Tidak ada data untuk diekspor.");
+    const jsonStr = JSON.stringify(dataPenduduk, null, 2);
+    const blob = new Blob([jsonStr], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a"); a.href = url; a.download = "Database_Penduduk.json";
+    document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
+}
+
+function triggerImport() {
+    document.getElementById('fileImport').click();
+}
+
+function prosesImport(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        try {
+            const importedData = JSON.parse(e.target.result);
+            if (!Array.isArray(importedData)) throw new Error("Format JSON tidak valid");
+
+            let addedCount = 0;
+            importedData.forEach(item => {
+                if (item.nik && !dataPenduduk.some(d => d.nik === item.nik)) {
+                    dataPenduduk.push({ nik: item.nik, kk: item.kk || '', status: item.status || false });
+                    addedCount++;
+                }
+            });
+
+            if (addedCount > 0) {
+                simpanKeLokal();
+                renderData(true);
+                showModal("Import Berhasil", `${addedCount} data baru berhasil digabungkan.`);
+            } else {
+                showModal("Info Import", "Tidak ada data baru ditambahkan (data duplikat/kosong).");
+            }
+        } catch (err) {
+            showModal("Gagal Import", "File JSON tidak valid atau rusak.");
+        }
+        event.target.value = ''; // Reset file input
+    };
+    reader.readAsText(file);
 }
 
 /* FITUR SUARA */
@@ -293,6 +338,7 @@ function mulaiVoiceInput(targetId) {
     recognition.onend = () => { btnVoice.classList.remove('recording'); inputElement.placeholder = targetId === 'nik' ? "Masukkan 16 digit angka" : "Boleh dikosongkan"; };
     recognition.start();
 }
+
 function mulaiVoiceSearch() {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SpeechRecognition) return showModal("Tidak Didukung", "Browser Anda tidak mendukung fitur ini.");

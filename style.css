@@ -7,6 +7,11 @@
 
 [data-theme="dark-default"]   { --primary: #10b981; --primary-hover: #059669; }
 [data-theme="dark-ocean"]     { --primary: #0ea5e9; --primary-hover: #0284c7; }
+[data-theme="dark-sapphire"]  { --primary: #3b82f6; --primary-hover: #2563eb; }
+[data-theme="dark-lavender"]  { --primary: #a855f7; --primary-hover: #9333ea; }
+[data-theme="dark-permen"]    { --primary: #ec4899; --primary-hover: #db2777; }
+[data-theme="dark-sunset"]    { --primary: #f97316; --primary-hover: #ea580c; }
+[data-theme="dark-rosegold"]  { --primary: #fda4af; --primary-hover: #f43f5e; }
 
 /* ================= TEMA BASE LIGHT ================= */
 [data-theme^="light-"] {
@@ -17,6 +22,15 @@
 
 [data-theme="light-nordic"]      { --primary: #64748b; --primary-hover: #475569; }
 [data-theme="light-citrus"]      { --primary: #f59e0b; --primary-hover: #d97706; }
+[data-theme="light-cottoncandy"] { --primary: #f472b6; --primary-hover: #ec4899; }
+[data-theme="light-mintgreen"]   { --primary: #14b8a6; --primary-hover: #0d9488; }
+[data-theme="light-illuminated"] { --primary: #06b6d4; --primary-hover: #0891b2; }
+[data-theme="light-snow"]        { --primary: #38bdf8; --primary-hover: #0284c7; }
+[data-theme="light-morningglow"] { --primary: #fb923c; --primary-hover: #f97316; }
+[data-theme="light-sunny"]       { --primary: #eab308; --primary-hover: #ca8a04; }
+[data-theme="light-day"]         { --primary: #0284c7; --primary-hover: #0369a1; }
+[data-theme="light-bright"]      { --primary: #84cc16; --primary-hover: #65a30d; }
+[data-theme="light-classic"]     { --primary: #475569; --primary-hover: #334155; }
 
 body {
     font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
@@ -80,8 +94,9 @@ label { display: block; margin-bottom: 6px; font-weight: 600; font-size: 14px; }
 
 .btn-voice {
     background-color: var(--primary); color: white; border: none; border-radius: 8px;
-    padding: 0 16px; font-size: 18px; cursor: pointer; min-width: 50px;
+    padding: 0 16px; font-size: 18px; cursor: pointer; min-width: 50px; transition: 0.3s;
 }
+.btn-voice:hover { background-color: var(--primary-hover); }
 .btn-voice.recording { background-color: #ef4444; animation: pulse 1s infinite; }
 
 @keyframes pulse {
@@ -95,21 +110,35 @@ button.btn-primary {
     padding: 14px; border: none; border-radius: 8px; font-size: 16px; font-weight: bold;
     cursor: pointer; margin-bottom: 10px; transition: 0.3s;
 }
+button.btn-primary:hover { background-color: var(--primary-hover); }
+
 button.btn-secondary {
     width: 100%; background-color: var(--btn-salin-bg); color: var(--text-main);
     padding: 12px; border: none; border-radius: 8px; font-size: 14px; font-weight: bold;
     cursor: pointer; transition: 0.3s;
 }
+
 .btn-back {
     background: transparent; border: none; color: var(--text-muted);
     font-weight: 600; font-size: 14px; padding: 0 0 15px 0; cursor: pointer;
     display: inline-flex; align-items: center; gap: 5px;
 }
+
+/* KUMPULAN TOMBOL DATABASE */
 button.btn-download {
     width: 100%; background-color: #10b981; color: white; padding: 14px;
-    border: none; border-radius: 8px; font-size: 16px; font-weight: bold;
+    border: none; border-radius: 8px; font-size: 14px; font-weight: bold;
     cursor: pointer; margin-top: 15px;
 }
+.btn-group-half {
+    display: flex; gap: 10px; margin-top: 10px;
+}
+.btn-export, .btn-import {
+    flex: 1; padding: 12px; border: none; border-radius: 8px;
+    font-size: 14px; font-weight: bold; cursor: pointer; color: white;
+}
+.btn-export { background-color: #3b82f6; } /* Biru */
+.btn-import { background-color: #8b5cf6; } /* Ungu */
 
 .search-container {
     display: flex; gap: 8px; margin-top: 10px; padding-top: 10px; border-top: 2px dashed var(--border-color);
@@ -170,11 +199,11 @@ button.btn-download {
 .modal-overlay {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(4px); display: none;
-    justify-content: center; align-items: center; z-index: 2000; padding: 20px;
+    justify-content: center; align-items: center; z-index: 2000; padding: 20px; box-sizing: border-box;
 }
 .modal-overlay.active { display: flex; animation: fadeIn 0.2s ease; }
 .modal-card { background-color: var(--card-bg); border-radius: 16px; padding: 24px 20px; width: 100%; max-width: 360px; text-align: center; }
-.modal-card h3 { margin-top: 0; margin-bottom: 12px; font-size: 18px; }
+.modal-card h3 { margin-top: 0; margin-bottom: 12px; font-size: 18px; color: var(--text-main); }
 .modal-card p { font-size: 14px; color: var(--text-muted); margin-bottom: 24px; }
 .modal-actions { display: flex; gap: 10px; justify-content: center; }
 .btn-modal { flex: 1; padding: 12px; border-radius: 8px; font-weight: 600; border: none; cursor: pointer; }

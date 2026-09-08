@@ -10,7 +10,6 @@
     <link rel="apple-touch-icon" href="icon-192.png">
     <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
     
-    <!-- Link ke file CSS eksternal -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -18,14 +17,12 @@
     <!-- VIEW 1: REGISTRASI (Beranda & Database) -->
     <div id="view-registrasi" class="view-section active">
         
-        <!-- Tab Bar Sub-Menu -->
         <div class="sub-tab-container">
             <button id="tab-beranda" class="sub-tab active" onclick="switchSubTab('beranda')">Beranda</button>
             <button id="tab-database" class="sub-tab" onclick="switchSubTab('database')">Database</button>
         </div>
 
         <div class="card-container">
-            
             <!-- SUB-VIEW: BERANDA (Form Input) -->
             <div id="sub-beranda" class="sub-view active">
                 <h2>Registrasi Data</h2>
@@ -61,7 +58,7 @@
             <!-- SUB-VIEW: DATABASE (Pencarian & Tabel) -->
             <div id="sub-database" class="sub-view">
                 <button class="btn-back" onclick="switchSubTab('beranda')">🡠 Kembali ke Beranda</button>
-                <h2>Database Penduduk</h2>
+                <h2>Database</h2>
 
                 <div class="search-container">
                     <div class="input-box">
@@ -72,7 +69,6 @@
                     <button id="btnVoiceSearch" class="btn-voice" onclick="mulaiVoiceSearch()" title="Cari Suara">🎤</button>
                 </div>
             </div>
-            
         </div>
 
         <!-- LIST DATA (Hanya tampil di Tab Database) -->
@@ -80,8 +76,18 @@
             <div class="data-list" id="dataContainer">
                 <div class="empty-state">Belum ada data tersimpan</div>
             </div>
+            
             <button id="btnLoadMore" class="btn-secondary" style="display: none; margin-top: 15px;" onclick="muatLebihBanyak()">Tampilkan Lebih Banyak ⮟</button>
-            <button class="btn-download" id="btnDownload" style="display: none;" onclick="downloadTXT()">Download Semua (TXT)</button>
+            
+            <!-- GROUP TOMBOL AKSI DATABASE -->
+            <div id="action-buttons" style="display: none;">
+                <button class="btn-download" onclick="downloadTXT()">⬇ Download Semua (TXT)</button>
+                <div class="btn-group-half">
+                    <button class="btn-export" onclick="exportJSON()">📤 Export JSON</button>
+                    <button class="btn-import" onclick="triggerImport()">📥 Import JSON</button>
+                </div>
+                <input type="file" id="fileImport" accept=".json" style="display: none;" onchange="prosesImport(event)">
+            </div>
         </div>
     </div>
 
@@ -94,13 +100,28 @@
     <!-- VIEW 3: TAMPILAN / SETTING -->
     <div id="view-tampilan" class="view-section">
         <h2>Pilih Tema</h2>
+        
         <div class="theme-section-title">MODE GELAP (DARK)</div>
         <div class="theme-item" onclick="pilihTemaItem('dark-default', this)" data-theme-val="dark-default"><span class="theme-dot" style="background-color: #10b981;"></span><span>Default</span></div>
         <div class="theme-item" onclick="pilihTemaItem('dark-ocean', this)" data-theme-val="dark-ocean"><span class="theme-dot" style="background-color: #0ea5e9;"></span><span>Ocean</span></div>
-        
+        <div class="theme-item" onclick="pilihTemaItem('dark-sapphire', this)" data-theme-val="dark-sapphire"><span class="theme-dot" style="background-color: #3b82f6;"></span><span>Sapphire</span></div>
+        <div class="theme-item" onclick="pilihTemaItem('dark-lavender', this)" data-theme-val="dark-lavender"><span class="theme-dot" style="background-color: #a855f7;"></span><span>Lavender</span></div>
+        <div class="theme-item" onclick="pilihTemaItem('dark-permen', this)" data-theme-val="dark-permen"><span class="theme-dot" style="background-color: #ec4899;"></span><span>Permen</span></div>
+        <div class="theme-item" onclick="pilihTemaItem('dark-sunset', this)" data-theme-val="dark-sunset"><span class="theme-dot" style="background-color: #f97316;"></span><span>Sunset</span></div>
+        <div class="theme-item" onclick="pilihTemaItem('dark-rosegold', this)" data-theme-val="dark-rosegold"><span class="theme-dot" style="background-color: #fda4af;"></span><span>Rose Gold</span></div>
+
         <div class="theme-section-title">MODE TERANG (LIGHT)</div>
         <div class="theme-item" onclick="pilihTemaItem('light-nordic', this)" data-theme-val="light-nordic"><span class="theme-dot" style="background-color: #64748b;"></span><span>Light Nordic</span></div>
         <div class="theme-item" onclick="pilihTemaItem('light-citrus', this)" data-theme-val="light-citrus"><span class="theme-dot" style="background-color: #f59e0b;"></span><span>Light Citrus</span></div>
+        <div class="theme-item" onclick="pilihTemaItem('light-cottoncandy', this)" data-theme-val="light-cottoncandy"><span class="theme-dot" style="background-color: #f472b6;"></span><span>Light Cotton Candy</span></div>
+        <div class="theme-item" onclick="pilihTemaItem('light-mintgreen', this)" data-theme-val="light-mintgreen"><span class="theme-dot" style="background-color: #14b8a6;"></span><span>Light Mint Green</span></div>
+        <div class="theme-item" onclick="pilihTemaItem('light-illuminated', this)" data-theme-val="light-illuminated"><span class="theme-dot" style="background-color: #06b6d4;"></span><span>Light Illuminated</span></div>
+        <div class="theme-item" onclick="pilihTemaItem('light-snow', this)" data-theme-val="light-snow"><span class="theme-dot" style="background-color: #38bdf8;"></span><span>Light Snow</span></div>
+        <div class="theme-item" onclick="pilihTemaItem('light-morningglow', this)" data-theme-val="light-morningglow"><span class="theme-dot" style="background-color: #fb923c;"></span><span>Light Morning Glow</span></div>
+        <div class="theme-item" onclick="pilihTemaItem('light-sunny', this)" data-theme-val="light-sunny"><span class="theme-dot" style="background-color: #eab308;"></span><span>Light Sunny</span></div>
+        <div class="theme-item" onclick="pilihTemaItem('light-day', this)" data-theme-val="light-day"><span class="theme-dot" style="background-color: #0284c7;"></span><span>Light Day</span></div>
+        <div class="theme-item" onclick="pilihTemaItem('light-bright', this)" data-theme-val="light-bright"><span class="theme-dot" style="background-color: #84cc16;"></span><span>Light Bright</span></div>
+        <div class="theme-item" onclick="pilihTemaItem('light-classic', this)" data-theme-val="light-classic"><span class="theme-dot" style="background-color: #475569;"></span><span>Light Classic</span></div>
     </div>
 
     <!-- BOTTOM NAVBAR -->
@@ -131,7 +152,6 @@
         </div>
     </div>
 
-    <!-- Link ke file JS eksternal -->
     <script src="script.js"></script>
 </body>
 </html>
