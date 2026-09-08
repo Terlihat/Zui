@@ -37,23 +37,30 @@
 
         /* ================= TEMA BASE LIGHT ================= */
         [data-theme^="light-"] {
-            --bg-color: #f3f4f6;
+            --bg-color: #f8fafc;
             --card-bg: #ffffff;
-            --text-main: #1f2937;
-            --text-muted: #6b7280;
-            --border-color: #e5e7eb;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
             --input-bg: #ffffff;
-            --input-text: #1f2937;
-            --header-bg: #f8fafc;
-            --btn-salin-bg: #e5e7eb;
+            --input-text: #0f172a;
+            --header-bg: #f1f5f9;
+            --btn-salin-bg: #e2e8f0;
             --nav-bg: #ffffff;
         }
 
-        /* Varian Mode Terang */
+        /* Varian Mode Terang (Lama & Baru) */
         [data-theme="light-nordic"]      { --primary: #64748b; --primary-hover: #475569; }
         [data-theme="light-citrus"]      { --primary: #f59e0b; --primary-hover: #d97706; }
         [data-theme="light-cottoncandy"] { --primary: #f472b6; --primary-hover: #ec4899; }
         [data-theme="light-mintgreen"]   { --primary: #14b8a6; --primary-hover: #0d9488; }
+        [data-theme="light-illuminated"] { --primary: #06b6d4; --primary-hover: #0891b2; }
+        [data-theme="light-snow"]        { --primary: #38bdf8; --primary-hover: #0284c7; }
+        [data-theme="light-morningglow"] { --primary: #fb923c; --primary-hover: #f97316; }
+        [data-theme="light-sunny"]       { --primary: #eab308; --primary-hover: #ca8a04; }
+        [data-theme="light-day"]         { --primary: #0284c7; --primary-hover: #0369a1; }
+        [data-theme="light-bright"]      { --primary: #84cc16; --primary-hover: #65a30d; }
+        [data-theme="light-classic"]     { --primary: #475569; --primary-hover: #334155; }
 
         body {
             font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
@@ -338,7 +345,7 @@
             box-shadow: 0 0 0 3px rgba(var(--primary), 0.2);
         }
 
-        /* STYLING LIST TEMA */
+        /* LIST TEMA */
         .theme-section-title {
             font-size: 12px;
             font-weight: 700;
@@ -368,7 +375,7 @@
 
         .theme-item.active {
             border-color: var(--primary);
-            background-color: rgba(0, 0, 0, 0.02); /* Sedikit highlight jika diperlukan */
+            background-color: rgba(0, 0, 0, 0.02);
         }
 
         .theme-dot {
@@ -527,6 +534,34 @@
             <span class="theme-dot" style="background-color: #14b8a6;"></span>
             <span>Light Mint Green</span>
         </div>
+        <div class="theme-item" onclick="pilihTemaItem('light-illuminated', this)" data-theme-val="light-illuminated">
+            <span class="theme-dot" style="background-color: #06b6d4;"></span>
+            <span>Light Illuminated</span>
+        </div>
+        <div class="theme-item" onclick="pilihTemaItem('light-snow', this)" data-theme-val="light-snow">
+            <span class="theme-dot" style="background-color: #38bdf8;"></span>
+            <span>Light Snow</span>
+        </div>
+        <div class="theme-item" onclick="pilihTemaItem('light-morningglow', this)" data-theme-val="light-morningglow">
+            <span class="theme-dot" style="background-color: #fb923c;"></span>
+            <span>Light Morning Glow</span>
+        </div>
+        <div class="theme-item" onclick="pilihTemaItem('light-sunny', this)" data-theme-val="light-sunny">
+            <span class="theme-dot" style="background-color: #eab308;"></span>
+            <span>Light Sunny</span>
+        </div>
+        <div class="theme-item" onclick="pilihTemaItem('light-day', this)" data-theme-val="light-day">
+            <span class="theme-dot" style="background-color: #0284c7;"></span>
+            <span>Light Day</span>
+        </div>
+        <div class="theme-item" onclick="pilihTemaItem('light-bright', this)" data-theme-val="light-bright">
+            <span class="theme-dot" style="background-color: #84cc16;"></span>
+            <span>Light Bright</span>
+        </div>
+        <div class="theme-item" onclick="pilihTemaItem('light-classic', this)" data-theme-val="light-classic">
+            <span class="theme-dot" style="background-color: #475569;"></span>
+            <span>Light Classic</span>
+        </div>
 
     </div>
 
@@ -550,11 +585,17 @@
         let dataPenduduk = [];
 
         window.onload = function() {
+            // MINTA IZIN PENYIMPANAN PERMANEN (Mencegah penghapusan otomatis oleh HP)
+            if (navigator.storage && navigator.storage.persist) {
+                navigator.storage.persist().then(granted => {
+                    if (granted) console.log("Penyimpanan lokal dijamin permanen oleh browser.");
+                });
+            }
+
             const temaTersimpan = localStorage.getItem('pilihanTema') || 'dark-default';
             document.documentElement.setAttribute('data-theme', temaTersimpan);
             updateMetaThemeColor(temaTersimpan);
             
-            // Set active state pada list tema
             const activeThemeElement = document.querySelector(`.theme-item[data-theme-val="${temaTersimpan}"]`);
             if(activeThemeElement) activeThemeElement.classList.add('active');
 
@@ -590,7 +631,7 @@
         function updateMetaThemeColor(tema) {
             const metaThemeColor = document.querySelector('meta[name="theme-color"]');
             if (metaThemeColor) {
-                metaThemeColor.setAttribute('content', tema.startsWith('dark') ? '#111827' : '#f3f4f6');
+                metaThemeColor.setAttribute('content', tema.startsWith('dark') ? '#111827' : '#f8fafc');
             }
         }
 
