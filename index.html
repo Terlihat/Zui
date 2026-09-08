@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id" data-theme="dark">
+<html lang="id" data-theme="dark-default">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -11,10 +11,9 @@
     <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
     
     <style>
-        /* ================= TEMA DEFAULT (DARK) ================= */
-        :root {
-            --primary: #6366f1;
-            --primary-hover: #4f46e5;
+        /* ================= TEMA BASE DARK ================= */
+        :root, 
+        [data-theme^="dark-"] {
             --bg-color: #111827;
             --card-bg: #1f2937;
             --text-main: #f9fafb;
@@ -27,10 +26,17 @@
             --nav-bg: #1f2937;
         }
 
-        /* ================= TEMA LIGHT ================= */
-        [data-theme="light"] {
-            --primary: #4f46e5;
-            --primary-hover: #4338ca;
+        /* Varian Mode Gelap */
+        [data-theme="dark-default"]   { --primary: #10b981; --primary-hover: #059669; }
+        [data-theme="dark-ocean"]     { --primary: #0ea5e9; --primary-hover: #0284c7; }
+        [data-theme="dark-sapphire"]  { --primary: #3b82f6; --primary-hover: #2563eb; }
+        [data-theme="dark-lavender"]  { --primary: #a855f7; --primary-hover: #9333ea; }
+        [data-theme="dark-permen"]    { --primary: #ec4899; --primary-hover: #db2777; }
+        [data-theme="dark-sunset"]    { --primary: #f97316; --primary-hover: #ea580c; }
+        [data-theme="dark-rosegold"]  { --primary: #fda4af; --primary-hover: #f43f5e; }
+
+        /* ================= TEMA BASE LIGHT ================= */
+        [data-theme^="light-"] {
             --bg-color: #f3f4f6;
             --card-bg: #ffffff;
             --text-main: #1f2937;
@@ -43,53 +49,11 @@
             --nav-bg: #ffffff;
         }
 
-        /* ================= TEMA GREEN LIGHT ================= */
-        [data-theme="green-light"] {
-            --primary: #059669;
-            --primary-hover: #047857;
-            --bg-color: #ecfdf5;
-            --card-bg: #ffffff;
-            --text-main: #064e3b;
-            --text-muted: #047857;
-            --border-color: #a7f3d0;
-            --input-bg: #ffffff;
-            --input-text: #064e3b;
-            --header-bg: #d1fae5;
-            --btn-salin-bg: #a7f3d0;
-            --nav-bg: #ffffff;
-        }
-
-        /* ================= TEMA BLUE DARK ================= */
-        [data-theme="blue-dark"] {
-            --primary: #0ea5e9;
-            --primary-hover: #0284c7;
-            --bg-color: #0f172a;
-            --card-bg: #1e293b;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --border-color: #334155;
-            --input-bg: #334155;
-            --input-text: #f8fafc;
-            --header-bg: #0f172a;
-            --btn-salin-bg: #475569;
-            --nav-bg: #1e293b;
-        }
-
-        /* ================= TEMA ORANGE LIGHT ================= */
-        [data-theme="orange-light"] {
-            --primary: #ec4899; 
-            --primary-hover: #db2777; 
-            --bg-color: #fff7ed; 
-            --card-bg: #ffffff;
-            --text-main: #431407; 
-            --text-muted: #9a3412;
-            --border-color: #fed7aa; 
-            --input-bg: #ffffff;
-            --input-text: #431407;
-            --header-bg: #ffedd5; 
-            --btn-salin-bg: #fce7f3; 
-            --nav-bg: #ffffff;
-        }
+        /* Varian Mode Terang */
+        [data-theme="light-nordic"]      { --primary: #64748b; --primary-hover: #475569; }
+        [data-theme="light-citrus"]      { --primary: #f59e0b; --primary-hover: #d97706; }
+        [data-theme="light-cottoncandy"] { --primary: #f472b6; --primary-hover: #ec4899; }
+        [data-theme="light-mintgreen"]   { --primary: #14b8a6; --primary-hover: #0d9488; }
 
         body {
             font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
@@ -150,7 +114,6 @@
             gap: 8px;
         }
 
-        /* STRUKTUR BARU UNTUK INPUT DAN TOMBOL X DI DALAMNYA */
         .input-box {
             position: relative;
             flex-grow: 1;
@@ -161,7 +124,7 @@
         .input-box input[type="text"] {
             width: 100%;
             padding: 14px;
-            padding-right: 45px; /* Menyediakan ruang agar teks tidak tertutup tombol X */
+            padding-right: 45px;
             background-color: var(--input-bg);
             color: var(--input-text);
             border: 1px solid var(--border-color);
@@ -177,7 +140,6 @@
             box-shadow: 0 0 0 3px rgba(var(--primary), 0.2);
         }
 
-        /* TOMBOL HAPUS INPUTAN (X) - POSISI INLINE */
         .btn-clear {
             position: absolute;
             right: 8px;
@@ -258,7 +220,6 @@
             margin-top: 15px;
         }
 
-        /* Pencarian & List Data */
         .search-container {
             display: flex;
             gap: 8px;
@@ -357,7 +318,6 @@
             padding: 20px;
         }
 
-        /* Halaman Notes */
         .note-textarea {
             width: 100%;
             height: 65vh;
@@ -378,32 +338,46 @@
             box-shadow: 0 0 0 3px rgba(var(--primary), 0.2);
         }
 
-        /* Halaman Tampilan / Setting */
-        .setting-item {
+        /* STYLING LIST TEMA */
+        .theme-section-title {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+            margin: 24px 0 12px 4px;
+            text-transform: uppercase;
+        }
+
+        .theme-section-title:first-child { margin-top: 0; }
+
+        .theme-item {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            padding: 16px 0;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .setting-item:last-child { border-bottom: none; }
-
-        .setting-label { font-weight: 600; font-size: 16px; }
-
-        .setting-select {
-            background-color: var(--input-bg);
-            color: var(--input-text);
+            padding: 14px 16px;
+            background-color: var(--card-bg);
             border: 1px solid var(--border-color);
-            padding: 8px 12px;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: bold;
-            outline: none;
+            border-radius: 12px;
+            margin-bottom: 10px;
             cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 600;
+            font-size: 15px;
         }
 
-        /* Bottom Navbar */
+        .theme-item:hover { border-color: var(--text-muted); }
+
+        .theme-item.active {
+            border-color: var(--primary);
+            background-color: rgba(0, 0, 0, 0.02); /* Sedikit highlight jika diperlukan */
+        }
+
+        .theme-dot {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            margin-right: 14px;
+        }
+
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -444,15 +418,8 @@
             transition: 0.2s;
         }
 
-        .nav-item.active {
-            color: var(--primary);
-        }
-
-        .nav-item.active .icon {
-            filter: grayscale(0%);
-            opacity: 1;
-            transform: scale(1.1);
-        }
+        .nav-item.active { color: var(--primary); }
+        .nav-item.active .icon { filter: grayscale(0%); opacity: 1; transform: scale(1.1); }
     </style>
 </head>
 <body>
@@ -511,19 +478,56 @@
 
     <!-- VIEW 3: TAMPILAN / SETTING -->
     <div id="view-tampilan" class="view-section">
-        <h2>Pengaturan Tampilan</h2>
-        <div class="card-container">
-            <div class="setting-item">
-                <div class="setting-label">Tema Aplikasi</div>
-                <select id="themeSelect" class="setting-select" onchange="ubahTema(this.value)">
-                    <option value="dark">Dark (Default)</option>
-                    <option value="light">Light</option>
-                    <option value="green-light">Green Light</option>
-                    <option value="blue-dark">Blue Dark</option>
-                    <option value="orange-light">Orange Light</option>
-                </select>
-            </div>
+        <h2>Pilih Tema</h2>
+        
+        <div class="theme-section-title">MODE GELAP (DARK)</div>
+        <div class="theme-item" onclick="pilihTemaItem('dark-default', this)" data-theme-val="dark-default">
+            <span class="theme-dot" style="background-color: #10b981;"></span>
+            <span>Default</span>
         </div>
+        <div class="theme-item" onclick="pilihTemaItem('dark-ocean', this)" data-theme-val="dark-ocean">
+            <span class="theme-dot" style="background-color: #0ea5e9;"></span>
+            <span>Ocean</span>
+        </div>
+        <div class="theme-item" onclick="pilihTemaItem('dark-sapphire', this)" data-theme-val="dark-sapphire">
+            <span class="theme-dot" style="background-color: #3b82f6;"></span>
+            <span>Sapphire</span>
+        </div>
+        <div class="theme-item" onclick="pilihTemaItem('dark-lavender', this)" data-theme-val="dark-lavender">
+            <span class="theme-dot" style="background-color: #a855f7;"></span>
+            <span>Lavender</span>
+        </div>
+        <div class="theme-item" onclick="pilihTemaItem('dark-permen', this)" data-theme-val="dark-permen">
+            <span class="theme-dot" style="background-color: #ec4899;"></span>
+            <span>Permen</span>
+        </div>
+        <div class="theme-item" onclick="pilihTemaItem('dark-sunset', this)" data-theme-val="dark-sunset">
+            <span class="theme-dot" style="background-color: #f97316;"></span>
+            <span>Sunset</span>
+        </div>
+        <div class="theme-item" onclick="pilihTemaItem('dark-rosegold', this)" data-theme-val="dark-rosegold">
+            <span class="theme-dot" style="background-color: #fda4af;"></span>
+            <span>Rose Gold</span>
+        </div>
+
+        <div class="theme-section-title">MODE TERANG (LIGHT)</div>
+        <div class="theme-item" onclick="pilihTemaItem('light-nordic', this)" data-theme-val="light-nordic">
+            <span class="theme-dot" style="background-color: #64748b;"></span>
+            <span>Light Nordic</span>
+        </div>
+        <div class="theme-item" onclick="pilihTemaItem('light-citrus', this)" data-theme-val="light-citrus">
+            <span class="theme-dot" style="background-color: #f59e0b;"></span>
+            <span>Light Citrus</span>
+        </div>
+        <div class="theme-item" onclick="pilihTemaItem('light-cottoncandy', this)" data-theme-val="light-cottoncandy">
+            <span class="theme-dot" style="background-color: #f472b6;"></span>
+            <span>Light Cotton Candy</span>
+        </div>
+        <div class="theme-item" onclick="pilihTemaItem('light-mintgreen', this)" data-theme-val="light-mintgreen">
+            <span class="theme-dot" style="background-color: #14b8a6;"></span>
+            <span>Light Mint Green</span>
+        </div>
+
     </div>
 
     <!-- BOTTOM NAVBAR -->
@@ -546,9 +550,13 @@
         let dataPenduduk = [];
 
         window.onload = function() {
-            const temaTersimpan = localStorage.getItem('pilihanTema') || 'dark';
-            ubahTema(temaTersimpan);
-            document.getElementById('themeSelect').value = temaTersimpan;
+            const temaTersimpan = localStorage.getItem('pilihanTema') || 'dark-default';
+            document.documentElement.setAttribute('data-theme', temaTersimpan);
+            updateMetaThemeColor(temaTersimpan);
+            
+            // Set active state pada list tema
+            const activeThemeElement = document.querySelector(`.theme-item[data-theme-val="${temaTersimpan}"]`);
+            if(activeThemeElement) activeThemeElement.classList.add('active');
 
             const dataTersimpan = localStorage.getItem('dataRegistrasi');
             if (dataTersimpan) {
@@ -570,6 +578,22 @@
             btnElement.classList.add('active');
         }
 
+        function pilihTemaItem(tema, element) {
+            document.querySelectorAll('.theme-item').forEach(el => el.classList.remove('active'));
+            element.classList.add('active');
+            
+            document.documentElement.setAttribute('data-theme', tema);
+            localStorage.setItem('pilihanTema', tema);
+            updateMetaThemeColor(tema);
+        }
+
+        function updateMetaThemeColor(tema) {
+            const metaThemeColor = document.querySelector('meta[name="theme-color"]');
+            if (metaThemeColor) {
+                metaThemeColor.setAttribute('content', tema.startsWith('dark') ? '#111827' : '#f3f4f6');
+            }
+        }
+
         function simpanCatatan() {
             const isiCatatan = document.getElementById('catatanInput').value;
             localStorage.setItem('dataCatatan', isiCatatan);
@@ -588,23 +612,6 @@
             document.getElementById(targetId).focus();
             if (targetId === 'searchInput') {
                 renderData();
-            }
-        }
-
-        function ubahTema(tema) {
-            document.documentElement.setAttribute('data-theme', tema);
-            localStorage.setItem('pilihanTema', tema);
-            
-            const metaThemeColor = document.querySelector('meta[name="theme-color"]');
-            if(metaThemeColor) {
-                const bgColors = {
-                    'dark': '#111827',
-                    'light': '#f3f4f6',
-                    'green-light': '#ecfdf5',
-                    'blue-dark': '#0f172a',
-                    'orange-light': '#fff7ed'
-                };
-                metaThemeColor.setAttribute('content', bgColors[tema] || '#111827');
             }
         }
 
