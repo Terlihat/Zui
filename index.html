@@ -24,6 +24,7 @@
             --input-text: #f9fafb;
             --header-bg: #111827;
             --btn-salin-bg: #4b5563;
+            --nav-bg: #1f2937;
         }
 
         /* ================= TEMA LIGHT ================= */
@@ -39,6 +40,7 @@
             --input-text: #1f2937;
             --header-bg: #f8fafc;
             --btn-salin-bg: #e5e7eb;
+            --nav-bg: #ffffff;
         }
 
         /* ================= TEMA GREEN LIGHT ================= */
@@ -54,6 +56,7 @@
             --input-text: #064e3b;
             --header-bg: #d1fae5;
             --btn-salin-bg: #a7f3d0;
+            --nav-bg: #ffffff;
         }
 
         /* ================= TEMA BLUE DARK ================= */
@@ -69,6 +72,7 @@
             --input-text: #f8fafc;
             --header-bg: #0f172a;
             --btn-salin-bg: #475569;
+            --nav-bg: #1e293b;
         }
 
         /* ================= TEMA ORANGE LIGHT ================= */
@@ -84,36 +88,55 @@
             --input-text: #431407;
             --header-bg: #ffedd5; 
             --btn-salin-bg: #fce7f3; 
+            --nav-bg: #ffffff;
         }
 
         body {
             font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             background-color: var(--bg-color);
             color: var(--text-main);
-            display: flex;
-            justify-content: center;
-            padding: 15px;
-            padding-bottom: 80px; 
             margin: 0;
+            padding: 0;
+            padding-bottom: 70px; /* Ruang untuk bottom navbar */
             transition: background-color 0.3s, color 0.3s;
         }
 
-        .container {
-            background-color: var(--card-bg);
+        /* Struktur Tampilan (Views) */
+        .view-section {
+            display: none;
             padding: 20px;
-            border-radius: 16px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
-            width: 100%;
-            max-width: 480px; 
-            transition: background-color 0.3s;
+            max-width: 480px;
+            margin: 0 auto;
+        }
+
+        .view-section.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         h2 {
             margin-top: 0;
             text-align: center;
             font-size: 22px;
+            margin-bottom: 20px;
         }
 
+        /* Container dalam View */
+        .card-container {
+            background-color: var(--card-bg);
+            padding: 20px;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            transition: background-color 0.3s;
+        }
+
+        /* Form & Input */
         .form-group {
             margin-bottom: 16px;
         }
@@ -148,6 +171,7 @@
             box-shadow: 0 0 0 3px rgba(var(--primary), 0.2);
         }
 
+        /* Tombol */
         .btn-voice {
             background-color: var(--primary);
             color: white;
@@ -162,16 +186,13 @@
             justify-content: center;
         }
         
-        .btn-voice:hover {
-            background-color: var(--primary-hover);
-        }
+        .btn-voice:hover { background-color: var(--primary-hover); }
         
         .btn-voice.recording {
             background-color: #ef4444;
             animation: pulse 1s infinite;
         }
 
-        /* TOMBOL HAPUS INPUTAN (X) */
         .btn-clear {
             background-color: var(--btn-salin-bg);
             color: var(--text-main);
@@ -212,14 +233,26 @@
             transition: background-color 0.3s;
         }
 
-        button.btn-primary:hover {
-            background-color: var(--primary-hover);
+        button.btn-primary:hover { background-color: var(--primary-hover); }
+
+        button.btn-download {
+            width: 100%;
+            background-color: #10b981;
+            color: white;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 15px;
         }
 
+        /* Pencarian & List Data */
         .search-container {
             display: flex;
             gap: 8px;
-            margin-top: 30px;
+            margin-top: 20px;
             margin-bottom: 15px;
             border-top: 2px dashed var(--border-color);
             padding-top: 20px;
@@ -235,19 +268,6 @@
             border-radius: 8px;
         }
 
-        button.btn-download {
-            width: 100%;
-            background-color: #10b981;
-            color: white;
-            padding: 14px;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 15px;
-        }
-
         .data-list {
             display: flex;
             flex-direction: column;
@@ -258,7 +278,7 @@
             border: 1px solid var(--border-color);
             border-radius: 8px;
             overflow: hidden;
-            transition: border-color 0.3s;
+            background-color: var(--card-bg);
         }
 
         .data-header {
@@ -271,14 +291,9 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            transition: background-color 0.3s, border-color 0.3s;
         }
 
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
+        .header-left { display: flex; align-items: center; gap: 12px; }
 
         .status-label {
             display: flex;
@@ -293,17 +308,8 @@
             border: 1px solid var(--border-color);
         }
 
-        .status-label input {
-            cursor: pointer;
-            width: 14px;
-            height: 14px;
-            margin: 0;
-        }
-
-        .status-text {
-            font-weight: bold;
-        }
-
+        .status-label input { cursor: pointer; width: 14px; height: 14px; margin: 0; }
+        .status-text { font-weight: bold; }
         .status-belum { color: #ef4444; }
         .status-sudah { color: #10b981; }
 
@@ -323,29 +329,12 @@
             align-items: center;
             padding: 12px;
             border-bottom: 1px solid var(--border-color);
-            transition: background-color 0.3s;
         }
 
-        .data-row:last-child {
-            border-bottom: none;
-        }
-
-        .data-info {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .data-label {
-            font-size: 12px;
-            color: var(--text-muted);
-            margin-bottom: 4px;
-        }
-
-        .data-value {
-            font-family: monospace;
-            font-size: 15px;
-            font-weight: 600;
-        }
+        .data-row:last-child { border-bottom: none; }
+        .data-info { display: flex; flex-direction: column; }
+        .data-label { font-size: 12px; color: var(--text-muted); margin-bottom: 4px; }
+        .data-value { font-family: monospace; font-size: 15px; font-weight: 600; }
 
         .btn-salin {
             background-color: var(--btn-salin-bg);
@@ -356,17 +345,10 @@
             font-size: 12px;
             font-weight: 600;
             cursor: pointer;
-            transition: 0.2s;
         }
 
-        .btn-salin.disalin {
-            background-color: #10b981 !important;
-            color: white !important;
-        }
-
-        .mark-kk {
-            background-color: rgba(16, 185, 129, 0.2) !important; 
-        }
+        .btn-salin.disalin { background-color: #10b981 !important; color: white !important; }
+        .mark-kk { background-color: rgba(16, 185, 129, 0.15) !important; }
 
         .empty-state {
             text-align: center;
@@ -375,101 +357,228 @@
             padding: 20px;
         }
 
-        .theme-switcher {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            background-color: var(--card-bg);
-            padding: 8px 12px;
-            border-radius: 20px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        /* Halaman Notes */
+        .note-textarea {
+            width: 100%;
+            height: 65vh;
+            background-color: var(--input-bg);
+            color: var(--input-text);
             border: 1px solid var(--border-color);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            z-index: 100;
+            border-radius: 12px;
+            padding: 16px;
+            font-size: 16px;
+            font-family: inherit;
+            resize: none;
+            box-sizing: border-box;
+        }
+        
+        .note-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(var(--primary), 0.2);
         }
 
-        .theme-switcher select {
-            background-color: transparent;
-            color: var(--text-main);
-            border: none;
+        /* Halaman Tampilan / Setting */
+        .setting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .setting-item:last-child { border-bottom: none; }
+
+        .setting-label { font-weight: 600; font-size: 16px; }
+
+        .setting-select {
+            background-color: var(--input-bg);
+            color: var(--input-text);
+            border: 1px solid var(--border-color);
+            padding: 8px 12px;
+            border-radius: 8px;
             font-size: 14px;
-            font-weight: 600;
+            font-weight: bold;
             outline: none;
             cursor: pointer;
         }
-        
-        .theme-switcher select option {
-            background-color: var(--card-bg);
-            color: var(--text-main);
+
+        /* Bottom Navbar */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 65px;
+            background-color: var(--nav-bg);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            border-top: 1px solid var(--border-color);
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            text-decoration: none;
+            background: none;
+            border: none;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            height: 100%;
+            transition: color 0.2s;
+        }
+
+        .nav-item .icon {
+            font-size: 22px;
+            margin-bottom: 4px;
+            filter: grayscale(100%);
+            opacity: 0.6;
+            transition: 0.2s;
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+        }
+
+        .nav-item.active .icon {
+            filter: grayscale(0%);
+            opacity: 1;
+            transform: scale(1.1);
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <h2>Registrasi Data</h2>
-        
-        <div class="form-group">
-            <label for="nik">NIK</label>
-            <div class="input-group">
-                <input type="text" id="nik" placeholder="Masukkan 16 digit angka" oninput="formatInputPintar(this)">
-                <button class="btn-clear" onclick="hapusInput('nik')" title="Hapus Teks">✖</button>
-                <button id="btnVoiceNik" class="btn-voice" onclick="mulaiVoiceInput('nik')" title="Dikte NIK">🎤</button>
+    <!-- VIEW 1: REGISTRASI -->
+    <div id="view-registrasi" class="view-section active">
+        <div class="card-container">
+            <h2>Registrasi Data</h2>
+            
+            <div class="form-group">
+                <label for="nik">NIK</label>
+                <div class="input-group">
+                    <input type="text" id="nik" placeholder="Masukkan 16 digit angka" oninput="formatInputPintar(this)">
+                    <button class="btn-clear" onclick="hapusInput('nik')" title="Hapus Teks">✖</button>
+                    <button id="btnVoiceNik" class="btn-voice" onclick="mulaiVoiceInput('nik')" title="Dikte NIK">🎤</button>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="kk">KK (Opsional)</label>
+                <div class="input-group">
+                    <input type="text" id="kk" placeholder="Boleh dikosongkan" oninput="formatInputPintar(this)">
+                    <button class="btn-clear" onclick="hapusInput('kk')" title="Hapus Teks">✖</button>
+                    <button id="btnVoiceKk" class="btn-voice" onclick="mulaiVoiceInput('kk')" title="Dikte KK">🎤</button>
+                </div>
+            </div>
+
+            <button class="btn-primary" onclick="tambahData()">Tambah Data</button>
+
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="🔍 Cari NIK / KK di sini..." oninput="renderData()">
+                <button class="btn-clear" onclick="hapusInput('searchInput')" title="Hapus Pencarian">✖</button>
+                <button id="btnVoiceSearch" class="btn-voice" onclick="mulaiVoiceSearch()" title="Cari dengan Suara">🎤</button>
             </div>
         </div>
 
-        <div class="form-group">
-            <label for="kk">KK (Opsional)</label>
-            <div class="input-group">
-                <input type="text" id="kk" placeholder="Boleh dikosongkan" oninput="formatInputPintar(this)">
-                <button class="btn-clear" onclick="hapusInput('kk')" title="Hapus Teks">✖</button>
-                <button id="btnVoiceKk" class="btn-voice" onclick="mulaiVoiceInput('kk')" title="Dikte KK">🎤</button>
+        <div style="margin-top: 15px;">
+            <div class="data-list" id="dataContainer">
+                <div class="empty-state">Belum ada data tersimpan</div>
+            </div>
+            <button class="btn-download" id="btnDownload" style="display: none;" onclick="downloadTXT()">Download Semua (TXT)</button>
+        </div>
+    </div>
+
+    <!-- VIEW 2: NOTE / CATATAN -->
+    <div id="view-note" class="view-section">
+        <h2>Catatan Bebas</h2>
+        <textarea id="catatanInput" class="note-textarea" placeholder="Tulis catatan Anda di sini... (otomatis tersimpan)" oninput="simpanCatatan()"></textarea>
+    </div>
+
+    <!-- VIEW 3: TAMPILAN / SETTING -->
+    <div id="view-tampilan" class="view-section">
+        <h2>Pengaturan Tampilan</h2>
+        <div class="card-container">
+            <div class="setting-item">
+                <div class="setting-label">Tema Aplikasi</div>
+                <select id="themeSelect" class="setting-select" onchange="ubahTema(this.value)">
+                    <option value="dark">Dark (Default)</option>
+                    <option value="light">Light</option>
+                    <option value="green-light">Green Light</option>
+                    <option value="blue-dark">Blue Dark</option>
+                    <option value="orange-light">Orange Light</option>
+                </select>
             </div>
         </div>
-
-        <button class="btn-primary" onclick="tambahData()">Tambah Data</button>
-
-        <div class="search-container">
-            <input type="text" id="searchInput" placeholder="🔍 Cari NIK / KK di sini..." oninput="renderData()">
-            <button class="btn-clear" onclick="hapusInput('searchInput')" title="Hapus Pencarian">✖</button>
-            <button id="btnVoiceSearch" class="btn-voice" onclick="mulaiVoiceSearch()" title="Cari dengan Suara">🎤</button>
-        </div>
-
-        <div class="data-list" id="dataContainer">
-            <div class="empty-state">Belum ada data tersimpan</div>
-        </div>
-
-        <button class="btn-download" id="btnDownload" style="display: none;" onclick="downloadTXT()">Download Semua (TXT)</button>
     </div>
 
-    <div class="theme-switcher">
-        <label for="themeSelect" style="margin:0; font-size: 18px;">🎨</label>
-        <select id="themeSelect" onchange="ubahTema(this.value)">
-            <option value="dark">Dark (Default)</option>
-            <option value="light">Light</option>
-            <option value="green-light">Green Light</option>
-            <option value="blue-dark">Blue Dark</option>
-            <option value="orange-light">Orange Light</option>
-        </select>
-    </div>
+    <!-- BOTTOM NAVBAR -->
+    <nav class="bottom-nav">
+        <button class="nav-item active" onclick="switchView('registrasi', this)">
+            <span class="icon">📋</span>
+            <span>Registrasi</span>
+        </button>
+        <button class="nav-item" onclick="switchView('note', this)">
+            <span class="icon">📝</span>
+            <span>Catatan</span>
+        </button>
+        <button class="nav-item" onclick="switchView('tampilan', this)">
+            <span class="icon">🎨</span>
+            <span>Tampilan</span>
+        </button>
+    </nav>
 
     <script>
         let dataPenduduk = [];
 
         window.onload = function() {
+            // Load Tema
             const temaTersimpan = localStorage.getItem('pilihanTema') || 'dark';
             ubahTema(temaTersimpan);
             document.getElementById('themeSelect').value = temaTersimpan;
 
+            // Load Data Registrasi
             const dataTersimpan = localStorage.getItem('dataRegistrasi');
             if (dataTersimpan) {
                 dataPenduduk = JSON.parse(dataTersimpan);
                 renderData();
             }
+
+            // Load Data Catatan
+            const catatanTersimpan = localStorage.getItem('dataCatatan');
+            if (catatanTersimpan) {
+                document.getElementById('catatanInput').value = catatanTersimpan;
+            }
         };
 
+        // FUNGSI NAVIGASI BAWAH
+        function switchView(viewId, btnElement) {
+            // Sembunyikan semua section
+            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+            // Hapus status active dari semua tombol nav
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            
+            // Tampilkan section tujuan
+            document.getElementById('view-' + viewId).classList.add('active');
+            // Aktifkan tombol nav yang diklik
+            btnElement.classList.add('active');
+        }
+
+        // FUNGSI CATATAN
+        function simpanCatatan() {
+            const isiCatatan = document.getElementById('catatanInput').value;
+            localStorage.setItem('dataCatatan', isiCatatan);
+        }
+
+        // FUNGSI REGISTRASI (EXISTING)
         function formatInputPintar(inputElement) {
             let angkaBersih = inputElement.value.replace(/[^0-9]/g, '');
             if (angkaBersih.length > 16) {
@@ -478,7 +587,6 @@
             inputElement.value = angkaBersih;
         }
 
-        // FUNGSI UNTUK MENGHAPUS INPUTAN SECARA CEPAT
         function hapusInput(targetId) {
             document.getElementById(targetId).value = '';
             document.getElementById(targetId).focus();
@@ -572,7 +680,6 @@
             });
         }
 
-        // FUNGSI INPUT SUARA UNTUK NIK DAN KK
         function mulaiVoiceInput(targetId) {
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
             if (!SpeechRecognition) {
@@ -612,7 +719,6 @@
             recognition.start();
         }
 
-        // FUNGSI PENCARIAN SUARA (KOLOM PENCARIAN)
         function mulaiVoiceSearch() {
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
             if (!SpeechRecognition) {
