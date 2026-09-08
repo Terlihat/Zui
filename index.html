@@ -171,6 +171,27 @@
             animation: pulse 1s infinite;
         }
 
+        /* TOMBOL HAPUS INPUTAN (X) */
+        .btn-clear {
+            background-color: var(--btn-salin-bg);
+            color: var(--text-main);
+            border: none;
+            border-radius: 8px;
+            padding: 0 14px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-clear:hover {
+            background-color: #ef4444;
+            color: white;
+        }
+
         @keyframes pulse {
             0% { transform: scale(1); }
             50% { transform: scale(1.05); }
@@ -253,7 +274,6 @@
             transition: background-color 0.3s, border-color 0.3s;
         }
 
-        /* MENGEMBALIKAN POSISI KE KIRI ATAS */
         .header-left {
             display: flex;
             align-items: center;
@@ -344,7 +364,6 @@
             color: white !important;
         }
 
-        /* MARK HIJAU TRANSPARAN UNTUK DUPLIKASI KK */
         .mark-kk {
             background-color: rgba(16, 185, 129, 0.2) !important; 
         }
@@ -396,6 +415,7 @@
             <label for="nik">NIK</label>
             <div class="input-group">
                 <input type="text" id="nik" placeholder="Masukkan 16 digit angka" oninput="formatInputPintar(this)">
+                <button class="btn-clear" onclick="hapusInput('nik')" title="Hapus Teks">✖</button>
                 <button id="btnVoiceNik" class="btn-voice" onclick="mulaiVoiceInput('nik')" title="Dikte NIK">🎤</button>
             </div>
         </div>
@@ -404,6 +424,7 @@
             <label for="kk">KK (Opsional)</label>
             <div class="input-group">
                 <input type="text" id="kk" placeholder="Boleh dikosongkan" oninput="formatInputPintar(this)">
+                <button class="btn-clear" onclick="hapusInput('kk')" title="Hapus Teks">✖</button>
                 <button id="btnVoiceKk" class="btn-voice" onclick="mulaiVoiceInput('kk')" title="Dikte KK">🎤</button>
             </div>
         </div>
@@ -412,6 +433,7 @@
 
         <div class="search-container">
             <input type="text" id="searchInput" placeholder="🔍 Cari NIK / KK di sini..." oninput="renderData()">
+            <button class="btn-clear" onclick="hapusInput('searchInput')" title="Hapus Pencarian">✖</button>
             <button id="btnVoiceSearch" class="btn-voice" onclick="mulaiVoiceSearch()" title="Cari dengan Suara">🎤</button>
         </div>
 
@@ -454,6 +476,15 @@
                 angkaBersih = angkaBersih.slice(0, 16);
             }
             inputElement.value = angkaBersih;
+        }
+
+        // FUNGSI UNTUK MENGHAPUS INPUTAN SECARA CEPAT
+        function hapusInput(targetId) {
+            document.getElementById(targetId).value = '';
+            document.getElementById(targetId).focus();
+            if (targetId === 'searchInput') {
+                renderData();
+            }
         }
 
         function ubahTema(tema) {
