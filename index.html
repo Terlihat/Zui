@@ -49,7 +49,7 @@
             --nav-bg: #ffffff;
         }
 
-        /* Varian Mode Terang (Lama & Baru) */
+        /* Varian Mode Terang */
         [data-theme="light-nordic"]      { --primary: #64748b; --primary-hover: #475569; }
         [data-theme="light-citrus"]      { --primary: #f59e0b; --primary-hover: #d97706; }
         [data-theme="light-cottoncandy"] { --primary: #f472b6; --primary-hover: #ec4899; }
@@ -427,6 +427,80 @@
 
         .nav-item.active { color: var(--primary); }
         .nav-item.active .icon { filter: grayscale(0%); opacity: 1; transform: scale(1.1); }
+
+        /* ================= MODAL KOSTUM ================= */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .modal-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 24px 20px;
+            width: 100%;
+            max-width: 360px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+
+        .modal-card h3 {
+            margin-top: 0;
+            margin-bottom: 12px;
+            font-size: 18px;
+            color: var(--text-main);
+        }
+
+        .modal-card p {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 24px;
+            line-height: 1.5;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .btn-modal {
+            flex: 1;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            border: none;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-modal.btn-confirm {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-modal.btn-cancel {
+            background-color: var(--btn-salin-bg);
+            color: var(--text-main);
+        }
     </style>
 </head>
 <body>
@@ -581,11 +655,23 @@
         </button>
     </nav>
 
+    <!-- MODAL POPUP KOSTUM -->
+    <div id="customModal" class="modal-overlay">
+        <div class="modal-card">
+            <h3 id="modalTitle">Informasi</h3>
+            <p id="modalMessage">Pesan informasi di sini...</p>
+            <div class="modal-actions">
+                <button id="modalBtnCancel" class="btn-modal btn-cancel">Batal</button>
+                <button id="modalBtnConfirm" class="btn-modal btn-confirm">Ya, Lanjutkan</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         let dataPenduduk = [];
+        let modalCallback = null;
 
         window.onload = function() {
-            // MINTA IZIN PENYIMPANAN PERMANEN (Mencegah penghapusan otomatis oleh HP)
             if (navigator.storage && navigator.storage.persist) {
                 navigator.storage.persist().then(granted => {
                     if (granted) console.log("Penyimpanan lokal dijamin permanen oleh browser.");
@@ -610,6 +696,40 @@
                 document.getElementById('catatanInput').value = catatanTersimpan;
             }
         };
+
+        /* FUNGSI MODAL DIALOG KOSTUM */
+        function showModal(title, message, isConfirm = false, onConfirm = null) {
+            document.getElementById('modalTitle').innerText = title;
+            document.getElementById('modalMessage').innerText = message;
+            
+            const btnCancel = document.getElementById('modalBtnCancel');
+            const btnConfirm = document.getElementById('modalBtnConfirm');
+            
+            modalCallback = onConfirm;
+
+            if (isConfirm) {
+                btnCancel.style.display = 'block';
+                btnConfirm.innerText = 'Ya, Lanjutkan';
+            } else {
+                btnCancel.style.display = 'none';
+                btnConfirm.innerText = 'OK';
+            }
+
+            document.getElementById('customModal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('customModal').classList.remove('active');
+            modalCallback = null;
+        }
+
+        document.getElementById('modalBtnConfirm').addEventListener('click', function() {
+            const callback = modalCallback;
+            closeModal();
+            if (callback) callback();
+        });
+
+        document.getElementById('modalBtnCancel').addEventListener('click', closeModal);
 
         function switchView(viewId, btnElement) {
             document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
@@ -660,6 +780,17 @@
             localStorage.setItem('dataRegistrasi', JSON.stringify(dataPenduduk));
         }
 
+        function eksekusiTambahData(nik, kk) {
+            dataPenduduk.push({ nik: nik, kk: kk, status: false });
+            simpanKeLokal();
+
+            document.getElementById('nik').value = '';
+            document.getElementById('kk').value = '';
+            document.getElementById('nik').focus();
+
+            renderData();
+        }
+
         function tambahData() {
             const inputNik = document.getElementById('nik');
             const inputKk = document.getElementById('kk');
@@ -668,37 +799,41 @@
             const kk = inputKk.value;
 
             if (nik.length !== 16) {
-                alert("NIK wajib diisi dan harus 16 digit!");
+                showModal("Perhatian", "NIK wajib diisi dan harus 16 digit!");
                 return;
             }
             
             if (kk.length > 0 && kk.length !== 16) {
-                alert("KK harus 16 digit atau dikosongkan sama sekali!");
+                showModal("Perhatian", "KK harus 16 digit atau dikosongkan sama sekali!");
                 return;
             }
 
             let isNikDuplicate = dataPenduduk.some(data => data.nik === nik);
             if (isNikDuplicate) {
-                alert("Gagal! NIK ini sudah tercatat di dalam database");
+                showModal("Gagal Menambahkan", "NIK ini sudah tercatat di dalam database!");
                 return;
             }
 
-            dataPenduduk.push({ nik: nik, kk: kk, status: false });
-            simpanKeLokal();
+            let isKkDuplicate = kk ? dataPenduduk.some(data => data.kk === kk) : false;
+            if (isKkDuplicate) {
+                showModal(
+                    "Konfirmasi No KK", 
+                    "No KK ini sudah tersedia di dalam database. Apakah Anda tetap akan menambahkan?", 
+                    true, 
+                    function() { eksekusiTambahData(nik, kk); }
+                );
+                return;
+            }
 
-            inputNik.value = '';
-            inputKk.value = '';
-            inputNik.focus();
-
-            renderData();
+            eksekusiTambahData(nik, kk);
         }
 
         function hapusData(indexOriginal) {
-            if (confirm("Hapus data ini?")) {
+            showModal("Konfirmasi Hapus", "Apakah Anda yakin ingin menghapus data ini?", true, function() {
                 dataPenduduk.splice(indexOriginal, 1);
                 simpanKeLokal(); 
                 renderData();
-            }
+            });
         }
 
         function ubahStatus(indexOriginal, elementCheckbox) {
@@ -727,7 +862,7 @@
         function mulaiVoiceInput(targetId) {
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
             if (!SpeechRecognition) {
-                alert("Maaf, browser Anda tidak mendukung fitur ini.");
+                showModal("Tidak Didukung", "Maaf, browser Anda tidak mendukung fitur dikte suara.");
                 return;
             }
 
@@ -752,7 +887,7 @@
 
             recognition.onerror = function(event) {
                 console.error("Error Speech Recognition: ", event.error);
-                alert("Pencarian suara gagal atau izin mikrofon ditolak.");
+                showModal("Gagal Dikte", "Pencarian suara gagal atau izin mikrofon ditolak.");
             };
 
             recognition.onend = function() {
@@ -766,7 +901,7 @@
         function mulaiVoiceSearch() {
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
             if (!SpeechRecognition) {
-                alert("Maaf, browser Anda tidak mendukung fitur ini.");
+                showModal("Tidak Didukung", "Maaf, browser Anda tidak mendukung fitur pencarian suara.");
                 return;
             }
 
