@@ -97,11 +97,10 @@
             color: var(--text-main);
             margin: 0;
             padding: 0;
-            padding-bottom: 70px; /* Ruang untuk bottom navbar */
+            padding-bottom: 70px; 
             transition: background-color 0.3s, color 0.3s;
         }
 
-        /* Struktur Tampilan (Views) */
         .view-section {
             display: none;
             padding: 20px;
@@ -126,7 +125,6 @@
             margin-bottom: 20px;
         }
 
-        /* Container dalam View */
         .card-container {
             background-color: var(--card-bg);
             padding: 20px;
@@ -136,7 +134,6 @@
             transition: background-color 0.3s;
         }
 
-        /* Form & Input */
         .form-group {
             margin-bottom: 16px;
         }
@@ -153,9 +150,18 @@
             gap: 8px;
         }
 
-        .input-group input[type="text"] {
+        /* STRUKTUR BARU UNTUK INPUT DAN TOMBOL X DI DALAMNYA */
+        .input-box {
+            position: relative;
             flex-grow: 1;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-box input[type="text"] {
+            width: 100%;
             padding: 14px;
+            padding-right: 45px; /* Menyediakan ruang agar teks tidak tertutup tombol X */
             background-color: var(--input-bg);
             color: var(--input-text);
             border: 1px solid var(--border-color);
@@ -165,13 +171,36 @@
             transition: all 0.3s;
         }
 
-        .input-group input[type="text"]:focus {
+        .input-box input[type="text"]:focus {
             outline: none;
             border-color: var(--primary);
             box-shadow: 0 0 0 3px rgba(var(--primary), 0.2);
         }
 
-        /* Tombol */
+        /* TOMBOL HAPUS INPUTAN (X) - POSISI INLINE */
+        .btn-clear {
+            position: absolute;
+            right: 8px;
+            background: transparent;
+            color: var(--text-muted);
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-clear:hover {
+            background-color: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+        }
+
         .btn-voice {
             background-color: var(--primary);
             color: white;
@@ -184,6 +213,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            min-width: 50px;
         }
         
         .btn-voice:hover { background-color: var(--primary-hover); }
@@ -191,26 +221,6 @@
         .btn-voice.recording {
             background-color: #ef4444;
             animation: pulse 1s infinite;
-        }
-
-        .btn-clear {
-            background-color: var(--btn-salin-bg);
-            color: var(--text-main);
-            border: none;
-            border-radius: 8px;
-            padding: 0 14px;
-            font-size: 14px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .btn-clear:hover {
-            background-color: #ef4444;
-            color: white;
         }
 
         @keyframes pulse {
@@ -256,16 +266,6 @@
             margin-bottom: 15px;
             border-top: 2px dashed var(--border-color);
             padding-top: 20px;
-        }
-
-        .search-container input {
-            flex-grow: 1;
-            padding: 10px 14px;
-            font-size: 14px;
-            background-color: var(--input-bg);
-            color: var(--input-text);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
         }
 
         .data-list {
@@ -465,8 +465,10 @@
             <div class="form-group">
                 <label for="nik">NIK</label>
                 <div class="input-group">
-                    <input type="text" id="nik" placeholder="Masukkan 16 digit angka" oninput="formatInputPintar(this)">
-                    <button class="btn-clear" onclick="hapusInput('nik')" title="Hapus Teks">✖</button>
+                    <div class="input-box">
+                        <input type="text" id="nik" placeholder="Masukkan 16 digit angka" oninput="formatInputPintar(this)">
+                        <button class="btn-clear" onclick="hapusInput('nik')" title="Hapus Teks">✖</button>
+                    </div>
                     <button id="btnVoiceNik" class="btn-voice" onclick="mulaiVoiceInput('nik')" title="Dikte NIK">🎤</button>
                 </div>
             </div>
@@ -474,8 +476,10 @@
             <div class="form-group">
                 <label for="kk">KK (Opsional)</label>
                 <div class="input-group">
-                    <input type="text" id="kk" placeholder="Boleh dikosongkan" oninput="formatInputPintar(this)">
-                    <button class="btn-clear" onclick="hapusInput('kk')" title="Hapus Teks">✖</button>
+                    <div class="input-box">
+                        <input type="text" id="kk" placeholder="Boleh dikosongkan" oninput="formatInputPintar(this)">
+                        <button class="btn-clear" onclick="hapusInput('kk')" title="Hapus Teks">✖</button>
+                    </div>
                     <button id="btnVoiceKk" class="btn-voice" onclick="mulaiVoiceInput('kk')" title="Dikte KK">🎤</button>
                 </div>
             </div>
@@ -483,8 +487,10 @@
             <button class="btn-primary" onclick="tambahData()">Tambah Data</button>
 
             <div class="search-container">
-                <input type="text" id="searchInput" placeholder="🔍 Cari NIK / KK di sini..." oninput="renderData()">
-                <button class="btn-clear" onclick="hapusInput('searchInput')" title="Hapus Pencarian">✖</button>
+                <div class="input-box">
+                    <input type="text" id="searchInput" placeholder="🔍 Cari NIK / KK di sini..." oninput="renderData()">
+                    <button class="btn-clear" onclick="hapusInput('searchInput')" title="Hapus Pencarian">✖</button>
+                </div>
                 <button id="btnVoiceSearch" class="btn-voice" onclick="mulaiVoiceSearch()" title="Cari dengan Suara">🎤</button>
             </div>
         </div>
@@ -540,45 +546,35 @@
         let dataPenduduk = [];
 
         window.onload = function() {
-            // Load Tema
             const temaTersimpan = localStorage.getItem('pilihanTema') || 'dark';
             ubahTema(temaTersimpan);
             document.getElementById('themeSelect').value = temaTersimpan;
 
-            // Load Data Registrasi
             const dataTersimpan = localStorage.getItem('dataRegistrasi');
             if (dataTersimpan) {
                 dataPenduduk = JSON.parse(dataTersimpan);
                 renderData();
             }
 
-            // Load Data Catatan
             const catatanTersimpan = localStorage.getItem('dataCatatan');
             if (catatanTersimpan) {
                 document.getElementById('catatanInput').value = catatanTersimpan;
             }
         };
 
-        // FUNGSI NAVIGASI BAWAH
         function switchView(viewId, btnElement) {
-            // Sembunyikan semua section
             document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
-            // Hapus status active dari semua tombol nav
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
             
-            // Tampilkan section tujuan
             document.getElementById('view-' + viewId).classList.add('active');
-            // Aktifkan tombol nav yang diklik
             btnElement.classList.add('active');
         }
 
-        // FUNGSI CATATAN
         function simpanCatatan() {
             const isiCatatan = document.getElementById('catatanInput').value;
             localStorage.setItem('dataCatatan', isiCatatan);
         }
 
-        // FUNGSI REGISTRASI (EXISTING)
         function formatInputPintar(inputElement) {
             let angkaBersih = inputElement.value.replace(/[^0-9]/g, '');
             if (angkaBersih.length > 16) {
