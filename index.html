@@ -147,26 +147,32 @@
             box-shadow: 0 0 0 3px rgba(var(--primary), 0.2);
         }
 
-        .btn-clear {
+        /* TOMBOL AKSI INPUT (TEMPEL & HAPUS) */
+        .btn-input-action {
             position: absolute;
             right: 8px;
             background: transparent;
             color: var(--text-muted);
             border: none;
             border-radius: 50%;
-            width: 30px;
-            height: 30px;
+            width: 32px;
+            height: 32px;
             font-size: 14px;
             font-weight: bold;
             cursor: pointer;
-            transition: 0.3s;
+            transition: 0.2s;
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
+        .btn-paste:hover {
+            background-color: rgba(16, 185, 129, 0.15);
+            color: var(--primary);
+        }
+
         .btn-clear:hover {
-            background-color: rgba(239, 68, 68, 0.1);
+            background-color: rgba(239, 68, 68, 0.15);
             color: #ef4444;
         }
 
@@ -428,7 +434,7 @@
         .nav-item.active { color: var(--primary); }
         .nav-item.active .icon { filter: grayscale(0%); opacity: 1; transform: scale(1.1); }
 
-        /* ================= MODAL KOSTUM ================= */
+        /* MODAL KOSTUM */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -514,8 +520,9 @@
                 <label for="nik">NIK</label>
                 <div class="input-group">
                     <div class="input-box">
-                        <input type="text" id="nik" placeholder="Masukkan 16 digit angka" oninput="formatInputPintar(this)">
-                        <button class="btn-clear" onclick="hapusInput('nik')" title="Hapus Teks">✖</button>
+                        <input type="text" id="nik" placeholder="Masukkan 16 digit angka" oninput="handleInputPintar(this)">
+                        <button class="btn-input-action btn-paste" id="btnPaste_nik" onclick="tempelInput('nik')" title="Tempel Clipboard">📋</button>
+                        <button class="btn-input-action btn-clear" id="btnClear_nik" onclick="hapusInput('nik')" title="Hapus Teks" style="display: none;">✖</button>
                     </div>
                     <button id="btnVoiceNik" class="btn-voice" onclick="mulaiVoiceInput('nik')" title="Dikte NIK">🎤</button>
                 </div>
@@ -525,8 +532,9 @@
                 <label for="kk">KK (Opsional)</label>
                 <div class="input-group">
                     <div class="input-box">
-                        <input type="text" id="kk" placeholder="Boleh dikosongkan" oninput="formatInputPintar(this)">
-                        <button class="btn-clear" onclick="hapusInput('kk')" title="Hapus Teks">✖</button>
+                        <input type="text" id="kk" placeholder="Boleh dikosongkan" oninput="handleInputPintar(this)">
+                        <button class="btn-input-action btn-paste" id="btnPaste_kk" onclick="tempelInput('kk')" title="Tempel Clipboard">📋</button>
+                        <button class="btn-input-action btn-clear" id="btnClear_kk" onclick="hapusInput('kk')" title="Hapus Teks" style="display: none;">✖</button>
                     </div>
                     <button id="btnVoiceKk" class="btn-voice" onclick="mulaiVoiceInput('kk')" title="Dikte KK">🎤</button>
                 </div>
@@ -536,8 +544,9 @@
 
             <div class="search-container">
                 <div class="input-box">
-                    <input type="text" id="searchInput" placeholder="🔍 Cari NIK / KK di sini..." oninput="renderData()">
-                    <button class="btn-clear" onclick="hapusInput('searchInput')" title="Hapus Pencarian">✖</button>
+                    <input type="text" id="searchInput" placeholder="🔍 Cari NIK / KK di sini..." oninput="handleSearchInput(this)">
+                    <button class="btn-input-action btn-paste" id="btnPaste_searchInput" onclick="tempelInput('searchInput')" title="Tempel Clipboard">📋</button>
+                    <button class="btn-input-action btn-clear" id="btnClear_searchInput" onclick="hapusInput('searchInput')" title="Hapus Pencarian" style="display: none;">✖</button>
                 </div>
                 <button id="btnVoiceSearch" class="btn-voice" onclick="mulaiVoiceSearch()" title="Cari dengan Suara">🎤</button>
             </div>
@@ -695,9 +704,67 @@
             if (catatanTersimpan) {
                 document.getElementById('catatanInput').value = catatanTersimpan;
             }
+
+            // Inisialisasi status tombol input saat dimuat
+            updateButtonState('nik');
+            updateButtonState('kk');
+            updateButtonState('searchInput');
         };
 
-        /* FUNGSI MODAL DIALOG KOSTUM */
+        /* MANAJEMEN TOMBOL TEMPEL & HAPUS DINAMIS */
+        function updateButtonState(inputId) {
+            const input = document.getElementById(inputId);
+            const btnPaste = document.getElementById('btnPaste_' + inputId);
+            const btnClear = document.getElementById('btnClear_' + inputId);
+
+            if (!input || !btnPaste || !btnClear) return;
+
+            if (input.value.length > 0) {
+                btnPaste.style.display = 'none';
+                btnClear.style.display = 'flex';
+            } else {
+                btnPaste.style.display = 'flex';
+                btnClear.style.display = 'none';
+            }
+        }
+
+        async function tempelInput(targetId) {
+            try {
+                const text = await navigator.clipboard.readText();
+                const inputElement = document.getElementById(targetId);
+                inputElement.value = text;
+                
+                if (targetId === 'searchInput') {
+                    handleSearchInput(inputElement);
+                } else {
+                    handleInputPintar(inputElement);
+                }
+            } catch (err) {
+                showModal("Gagal Tempel", "Tidak dapat membaca clipboard. Pastikan Anda telah memberikan izin akses clipboard pada browser.");
+            }
+        }
+
+        function handleInputPintar(inputElement) {
+            formatInputPintar(inputElement);
+            updateButtonState(inputElement.id);
+        }
+
+        function handleSearchInput(inputElement) {
+            updateButtonState(inputElement.id);
+            renderData();
+        }
+
+        function hapusInput(targetId) {
+            const inputElement = document.getElementById(targetId);
+            inputElement.value = '';
+            inputElement.focus();
+            updateButtonState(targetId);
+            if (targetId === 'searchInput') {
+                renderData();
+            }
+        }
+
+        /* MODAL DIALOG KOSTUM */
         function showModal(title, message, isConfirm = false, onConfirm = null) {
             document.getElementById('modalTitle').innerText = title;
             document.getElementById('modalMessage').innerText = message;
@@ -768,14 +835,6 @@
             inputElement.value = angkaBersih;
         }
 
-        function hapusInput(targetId) {
-            document.getElementById(targetId).value = '';
-            document.getElementById(targetId).focus();
-            if (targetId === 'searchInput') {
-                renderData();
-            }
-        }
-
         function simpanKeLokal() {
             localStorage.setItem('dataRegistrasi', JSON.stringify(dataPenduduk));
         }
@@ -784,8 +843,8 @@
             dataPenduduk.push({ nik: nik, kk: kk, status: false });
             simpanKeLokal();
 
-            document.getElementById('nik').value = '';
-            document.getElementById('kk').value = '';
+            hapusInput('nik');
+            hapusInput('kk');
             document.getElementById('nik').focus();
 
             renderData();
@@ -882,7 +941,7 @@
                 let hasilSuara = event.results[0][0].transcript;
                 let angkaPencarian = hasilSuara.replace(/\s+/g, ''); 
                 inputElement.value = angkaPencarian;
-                formatInputPintar(inputElement); 
+                handleInputPintar(inputElement); 
             };
 
             recognition.onerror = function(event) {
@@ -907,25 +966,26 @@
 
             const recognition = new SpeechRecognition();
             const btnVoice = document.getElementById('btnVoiceSearch');
+            const inputElement = document.getElementById('searchInput');
             
             recognition.lang = 'id-ID';
             recognition.interimResults = false;
             
             recognition.onstart = function() {
                 btnVoice.classList.add('recording');
-                document.getElementById('searchInput').placeholder = "Mendengarkan...";
+                inputElement.placeholder = "Mendengarkan...";
             };
 
             recognition.onresult = function(event) {
                 let hasilSuara = event.results[0][0].transcript;
                 let angkaPencarian = hasilSuara.replace(/\s+/g, ''); 
-                document.getElementById('searchInput').value = angkaPencarian;
-                renderData();
+                inputElement.value = angkaPencarian;
+                handleSearchInput(inputElement);
             };
 
             recognition.onend = function() {
                 btnVoice.classList.remove('recording');
-                document.getElementById('searchInput').placeholder = "🔍 Cari NIK / KK di sini...";
+                inputElement.placeholder = "🔍 Cari NIK / KK di sini...";
             };
 
             recognition.start();
