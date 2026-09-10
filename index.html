@@ -57,8 +57,8 @@
 
             <!-- SUB-VIEW: DATABASE (Pencarian & Tabel) -->
             <div id="sub-database" class="sub-view">
-                <button class="btn-back" onclick="switchSubTab('beranda')">🡠 Kembali ke Beranda</button>
-                <h2>Database</h2>
+                <button class="btn-back" onclick="switchSubTab('beranda')">⬅ Kembali ke Beranda</button>
+                <h2>DATABASE</h2>
 
                 <div class="search-container">
                     <div class="input-box">
@@ -77,11 +77,11 @@
                 <div class="empty-state">Belum ada data tersimpan</div>
             </div>
             
-            <button id="btnLoadMore" class="btn-secondary" style="display: none; margin-top: 15px;" onclick="muatLebihBanyak()">Tampilkan Lebih Banyak ⮟</button>
+            <button id="btnLoadMore" class="btn-secondary" style="display: none; margin-top: 15px;" onclick="muatLebihBanyak()">Tampilkan Lebih Banyak ⬇</button>
             
             <!-- GROUP TOMBOL AKSI DATABASE (Selalu Tampil) -->
             <div id="action-buttons" style="margin-top: 15px;">
-                <button class="btn-download" onclick="downloadTXT()">⬇ Download Semua (TXT)</button>
+                <button class="btn-download" onclick="downloadTXT()">Download Semua (TXT)</button>
                 <div class="btn-group-half">
                     <button class="btn-export" onclick="exportJSON()">📤 Export</button>
                     <button class="btn-import" onclick="triggerImport()">📥 Import</button>
@@ -153,7 +153,7 @@
     </div>
 	
 	<!-- PWA & OFFLINE CONTROLS -->
-    <div class="floating-controls-left">
+    <div class="floating-controls-center">
         <button id="btnInstallPwa" class="btn-floating btn-pwa" style="display: none;">📲 Install App</button>
         <button id="btnUpdatePwa" class="btn-floating btn-pwa-update" style="display: none;">🔄 Update Tersedia</button>
         <div id="offlineIndicator" class="badge-offline" style="display: none;">📵 Mode Offline</div>

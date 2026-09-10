@@ -92,12 +92,32 @@ label { display: block; margin-bottom: 6px; font-weight: 600; font-size: 14px; }
 .btn-paste:hover { background-color: rgba(16, 185, 129, 0.15); color: var(--primary); }
 .btn-clear:hover { background-color: rgba(239, 68, 68, 0.15); color: #ef4444; }
 
+/* Menetralkan tampilan tombol dikte */
 .btn-voice {
-    background-color: var(--primary); color: white; border: none; border-radius: 8px;
-    padding: 0 16px; font-size: 18px; cursor: pointer; min-width: 50px; transition: 0.3s;
+    background-color: #374151; /* Warna senada dengan background form input */
+    color: #9ca3af; /* Warna ikon abu-abu redup */
+    border: 1px solid transparent; /* Atau samakan dengan warna border input Anda */
+    border-radius: 8px; /* Sesuaikan radius dengan input */
+    padding: 0 16px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
-.btn-voice:hover { background-color: var(--primary-hover); }
-.btn-voice.recording { background-color: #ef4444; animation: pulse 1s infinite; }
+
+/* Efek saat tombol di-hover */
+.btn-voice:hover {
+    background-color: #4b5563; /* Sedikit lebih terang saat disentuh */
+    color: #ffffff;
+}
+
+/* Efek visual saat mikrofon sedang aktif merekam */
+.btn-voice.recording {
+    color: #ef4444; /* Ikon menjadi merah menyala saat aktif */
+    background-color: #fee2e2; /* Opsional: latar menjadi merah sangat pudar */
+    animation: pulse 1.5s infinite;
+}
 
 @keyframes pulse {
     0% { transform: scale(1); }
@@ -211,9 +231,18 @@ button.btn-download {
 .btn-cancel { background-color: var(--btn-salin-bg); color: var(--text-main); }
 
 /* ================= FLOATING BUTTONS & PWA ================= */
-.floating-controls-left {
-    position: fixed; bottom: 85px; left: 20px;
-    display: flex; flex-direction: column; gap: 10px; z-index: 1000;
+/* Container PWA diposisikan di tengah atas navbar */
+.floating-controls-center {
+    position: fixed; 
+    bottom: 80px; /* Tepat di atas bottom navbar */
+    left: 50%; 
+    transform: translateX(-50%); /* Memastikan benar-benar di tengah layar */
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; /* Pusatkan tombol/badge */
+    gap: 10px; 
+    z-index: 1000;
+    width: max-content;
 }
 
 .btn-floating {
@@ -233,11 +262,22 @@ button.btn-download {
     border-radius: 20px; font-size: 13px; font-weight: bold; box-shadow: 0 4px 6px rgba(0,0,0,0.3);
 }
 
+/* Tombol Scroll dikecilkan dan dinaikkan posisinya */
 #btnScrollTop {
-    position: fixed; bottom: 85px; right: 20px; width: 45px; height: 45px;
-    border-radius: 50%; background-color: var(--primary); color: white;
-    z-index: 1000; opacity: 0; pointer-events: none; transform: translateY(10px);
+    position: fixed; 
+    bottom: 130px; /* Dinaikkan agar tidak menyentuh tombol PWA */
+    right: 20px; 
+    width: 38px; /* Ukuran diperkecil */
+    height: 38px; /* Ukuran diperkecil */
+    border-radius: 50%; 
+    background-color: var(--primary); 
+    color: white;
+    z-index: 1000; 
+    opacity: 0; 
+    pointer-events: none; 
+    transform: translateY(10px);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
 }
 #btnScrollTop.visible { opacity: 1; pointer-events: auto; transform: translateY(0); }
-#btnScrollTop svg { width: 24px; height: 24px; }
+#btnScrollTop svg { width: 20px; height: 20px; } /* Icon SVG juga diperkecil */
 #btnScrollTop:hover { transform: translateY(-3px); }
