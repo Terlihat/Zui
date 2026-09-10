@@ -209,3 +209,35 @@ button.btn-download {
 .btn-modal { flex: 1; padding: 12px; border-radius: 8px; font-weight: 600; border: none; cursor: pointer; }
 .btn-confirm { background-color: var(--primary); color: white; }
 .btn-cancel { background-color: var(--btn-salin-bg); color: var(--text-main); }
+
+/* ================= FLOATING BUTTONS & PWA ================= */
+.floating-controls-left {
+    position: fixed; bottom: 85px; left: 20px;
+    display: flex; flex-direction: column; gap: 10px; z-index: 1000;
+}
+
+.btn-floating {
+    border: none; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    transition: all 0.3s ease; display: flex; align-items: center; justify-content: center;
+}
+
+.btn-pwa, .btn-pwa-update {
+    padding: 10px 16px; border-radius: 20px; font-weight: bold; color: white; font-size: 13px;
+}
+.btn-pwa { background-color: var(--primary); }
+.btn-pwa:hover { transform: scale(1.05); }
+.btn-pwa-update { background-color: #ef4444; animation: pulse 1.5s infinite; }
+
+.badge-offline {
+    background-color: #f59e0b; color: white; padding: 8px 14px; 
+    border-radius: 20px; font-size: 13px; font-weight: bold; box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+}
+
+#btnScrollTop {
+    position: fixed; bottom: 85px; right: 20px; width: 45px; height: 45px;
+    border-radius: 50%; background-color: var(--primary); color: white;
+    z-index: 1000; opacity: 0; pointer-events: none; transform: translateY(10px);
+}
+#btnScrollTop.visible { opacity: 1; pointer-events: auto; transform: translateY(0); }
+#btnScrollTop svg { width: 24px; height: 24px; }
+#btnScrollTop:hover { transform: translateY(-3px); }

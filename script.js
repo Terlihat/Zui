@@ -203,7 +203,7 @@ function renderData(resetLimit = false) {
 
     if (dataPenduduk.length === 0) {
         container.innerHTML = '<div class="empty-state">Belum ada data tersimpan</div>';
-        actionBtns.style.display = 'none';
+        actionBtns.style.display = 'block';
         return;
     }
 
@@ -348,4 +348,70 @@ function mulaiVoiceSearch() {
     recognition.onresult = (e) => { inputElement.value = e.results[0][0].transcript.replace(/\s+/g, ''); handleSearchInput(inputElement); };
     recognition.onend = () => { btnVoice.classList.remove('recording'); inputElement.placeholder = "🔍 Cari NIK / KK..."; };
     recognition.start();
+}
+
+/* ================= PWA, CACHE & OFFLINE ================= */
+let deferredPrompt;
+let newWorker;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    document.getElementById('btnInstallPwa').style.display = 'block';
+});
+
+document.getElementById('btnInstallPwa').addEventListener('click', async () => {
+    if (deferredPrompt) {
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        if (outcome === 'accepted') document.getElementById('btnInstallPwa').style.display = 'none';
+        deferredPrompt = null;
+    }
+});
+
+// Deteksi Update Service Worker
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js').then(reg => {
+        reg.addEventListener('updatefound', () => {
+            newWorker = reg.installing;
+            newWorker.addEventListener('statechange', () => {
+                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                    document.getElementById('btnUpdatePwa').style.display = 'block';
+                }
+            });
+        });
+    });
+
+    let refreshing;
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+        if (refreshing) return;
+        window.location.reload();
+        refreshing = true;
+    });
+}
+
+document.getElementById('btnUpdatePwa').addEventListener('click', () => {
+    if (newWorker) newWorker.postMessage({ action: 'skipWaiting' });
+});
+
+// Deteksi Mode Offline
+function updateStatusJaringan() {
+    document.getElementById('offlineIndicator').style.display = navigator.onLine ? 'none' : 'block';
+}
+window.addEventListener('online', updateStatusJaringan);
+window.addEventListener('offline', updateStatusJaringan);
+updateStatusJaringan();
+
+/* ================= SCROLL TO TOP ================= */
+window.addEventListener('scroll', () => {
+    const btnScroll = document.getElementById('btnScrollTop');
+    if (window.scrollY > 150) {
+        btnScroll.classList.add('visible');
+    } else {
+        btnScroll.classList.remove('visible');
+    }
+});
+
+function scrollToTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 }

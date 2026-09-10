@@ -79,12 +79,12 @@
             
             <button id="btnLoadMore" class="btn-secondary" style="display: none; margin-top: 15px;" onclick="muatLebihBanyak()">Tampilkan Lebih Banyak ⮟</button>
             
-            <!-- GROUP TOMBOL AKSI DATABASE -->
-            <div id="action-buttons" style="display: none;">
+            <!-- GROUP TOMBOL AKSI DATABASE (Selalu Tampil) -->
+            <div id="action-buttons" style="margin-top: 15px;">
                 <button class="btn-download" onclick="downloadTXT()">⬇ Download Semua (TXT)</button>
                 <div class="btn-group-half">
-                    <button class="btn-export" onclick="exportJSON()">📤 Export JSON</button>
-                    <button class="btn-import" onclick="triggerImport()">📥 Import JSON</button>
+                    <button class="btn-export" onclick="exportJSON()">📤 Export</button>
+                    <button class="btn-import" onclick="triggerImport()">📥 Import</button>
                 </div>
                 <input type="file" id="fileImport" accept=".json" style="display: none;" onchange="prosesImport(event)">
             </div>
@@ -151,6 +151,20 @@
             </div>
         </div>
     </div>
+	
+	<!-- PWA & OFFLINE CONTROLS -->
+    <div class="floating-controls-left">
+        <button id="btnInstallPwa" class="btn-floating btn-pwa" style="display: none;">📲 Install App</button>
+        <button id="btnUpdatePwa" class="btn-floating btn-pwa-update" style="display: none;">🔄 Update Tersedia</button>
+        <div id="offlineIndicator" class="badge-offline" style="display: none;">📵 Mode Offline</div>
+    </div>
+
+    <!-- TOMBOL SCROLL UP -->
+    <button id="btnScrollTop" class="btn-floating btn-scroll" onclick="scrollToTop()" title="Kembali ke atas">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="18 15 12 9 6 15"></polyline>
+        </svg>
+    </button>
 
     <script src="script.js"></script>
 </body>
