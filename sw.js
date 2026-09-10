@@ -1,4 +1,4 @@
-const CACHE_NAME = 'reg-data-cache-v15';
+const CACHE_NAME = 'reg-data-cache-v16';
 const urlsToCache = [
   './', './index.html', './style.css', './script.js', 
   './manifest.json', './icon-192.png', './icon-512.png'
